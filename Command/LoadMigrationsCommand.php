@@ -109,7 +109,7 @@ class LoadMigrationsCommand extends ContainerAwareCommand
      */
     protected function getMigrationLoader(InputInterface $input)
     {
-        $migrationLoader = $this->getContainer()->get('oro_migration.migrations.loader');
+        $migrationLoader = $this->getContainer()->get('okvpn_migration.migrations.loader');
         $bundles         = $input->getOption('bundles');
         if (!empty($bundles)) {
             $migrationLoader->setBundles($bundles);
@@ -128,7 +128,7 @@ class LoadMigrationsCommand extends ContainerAwareCommand
      */
     protected function getMigrationExecutor(InputInterface $input)
     {
-        return $this->getContainer()->get('oro_migration.migrations.executor');
+        return $this->getContainer()->get('okvpn_migration.migrations.executor');
     }
 
     /**

@@ -9,8 +9,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class MigrationExtensionPass implements CompilerPassInterface
 {
-    const MANAGER_SERVICE_KEY = 'oro_migration.migrations.extension_manager';
-    const TAG                 = 'oro_migration.extension';
+    const MANAGER_SERVICE_KEY = 'okvpn_migration.migrations.extension_manager';
+    const TAG                 = 'okvpn_migration.extension';
 
     /**
      * {@inheritdoc}

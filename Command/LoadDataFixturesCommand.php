@@ -99,7 +99,7 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
     protected function getFixtures(InputInterface $input, OutputInterface $output)
     {
         /** @var DataFixturesLoader $loader */
-        $loader              = $this->getContainer()->get('oro_migration.data_fixtures.loader');
+        $loader              = $this->getContainer()->get('okvpn_migration.data_fixtures.loader');
         $bundles             = $input->getOption('bundles');
         $excludeBundles      = $input->getOption('exclude');
         $fixtureRelativePath = $this->getFixtureRelativePath($input);

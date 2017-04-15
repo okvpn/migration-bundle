@@ -8,7 +8,7 @@ use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroMigrationBundle implements Migration
 {
-    const MIGRATION_DATA_TABLE = 'oro_migrations_data';
+    const MIGRATION_DATA_TABLE = 'okvpn_migrations_data';
 
     /**
      * @inheritdoc
