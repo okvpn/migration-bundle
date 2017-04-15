@@ -55,7 +55,7 @@ class SchemaDumperExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('oro_migration_get_schema_column_options', [$this, 'getColumnOptions']),
+            new \Twig_SimpleFunction('okvpn_migration_get_schema_column_options', [$this, 'getColumnOptions']),
         ];
     }
 

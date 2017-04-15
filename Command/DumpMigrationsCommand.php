@@ -137,7 +137,7 @@ class DumpMigrationsCommand extends ContainerAwareCommand
      */
     protected function dumpPhpSchema(Schema $schema, OutputInterface $output)
     {
-        $visitor = $this->getContainer()->get('oro_migration.tools.schema_dumper');
+        $visitor = $this->getContainer()->get('okvpn_migration.tools.schema_dumper');
         $schema->visit($visitor);
 
         $output->writeln(

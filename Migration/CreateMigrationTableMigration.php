@@ -6,7 +6,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 class CreateMigrationTableMigration implements Migration
 {
-    const MIGRATION_TABLE = 'oro_migrations';
+    const MIGRATION_TABLE = 'okvpn_migrations';
 
     /**
      * @inheritdoc
@@ -19,6 +19,6 @@ class CreateMigrationTableMigration implements Migration
         $table->addColumn('version', 'string', ['notnull' => true, 'length' => 250]);
         $table->addColumn('loaded_at', 'datetime', ['notnull' => true]);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['bundle'], 'idx_oro_migrations', []);
+        $table->addIndex(['bundle'], 'idx_okvpn_migrations', []);
     }
 }

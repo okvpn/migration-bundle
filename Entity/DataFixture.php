@@ -5,7 +5,7 @@ namespace Okvpn\Bundle\MigrationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table("oro_migrations_data")
+ * @ORM\Table("okvpn_migrations_data")
  * @ORM\Entity(repositoryClass="Okvpn\Bundle\MigrationBundle\Entity\Repository\DataFixtureRepository")
  */
 class DataFixture

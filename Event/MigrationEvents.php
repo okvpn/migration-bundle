@@ -10,7 +10,7 @@ class MigrationEvents
      *
      * @var string
      */
-    const PRE_UP = 'oro_migration.pre_up';
+    const PRE_UP = 'okvpn_migration.pre_up';
 
     /**
      * This event is raised after a list of migrations are built.
@@ -18,5 +18,5 @@ class MigrationEvents
      *
      * @var string
      */
-    const POST_UP = 'oro_migration.post_up';
+    const POST_UP = 'okvpn_migration.post_up';
 }

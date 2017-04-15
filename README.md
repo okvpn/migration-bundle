@@ -255,7 +255,7 @@ services:
     acme_test.migration.extension.my:
         class: %acme_test.migration.extension.my.class%
         tags:
-            - { name: oro_migration.extension, extension_name: test /*, priority: -10 - priority attribute is optional an can be helpful if you need to override existing extension */ }
+            - { name: okvpn_migration.extension, extension_name: test /*, priority: -10 - priority attribute is optional an can be helpful if you need to override existing extension */ }
 ```
 
 If you need an access to the database platform or the name generator you extension class should implement [DatabasePlatformAwareInterface][3] or [NameGeneratorAwareInterface][4] appropriately.
