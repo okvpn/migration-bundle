@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Migration;
 
 /**
  * Ordered Migration interface needs to be implemented by migrations,

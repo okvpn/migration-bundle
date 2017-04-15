@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Schema;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Schema;
 
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 
 class TableWithNameGenerator extends Table
 {

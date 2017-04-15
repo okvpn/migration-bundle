@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tools;
+namespace Okvpn\Bundle\MigrationBundle\Tools;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Visitor\AbstractVisitor;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Event;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Event;
 
-use Oro\Bundle\MigrationBundle\Event\PreMigrationEvent;
+use Okvpn\Bundle\MigrationBundle\Event\PreMigrationEvent;
 
 class PreMigrationEventTest extends \PHPUnit_Framework_TestCase
 {

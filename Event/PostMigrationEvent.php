@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Event;
+namespace Okvpn\Bundle\MigrationBundle\Event;
 
 class PostMigrationEvent extends MigrationEvent
 {

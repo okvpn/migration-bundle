@@ -1,15 +1,15 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
-use Oro\Bundle\MigrationBundle\Migration\MigrationState;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\v1_0\Test1BundleMigration10;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\v1_1\Test1BundleMigration11;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationState;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\v1_0\Test1BundleMigration10;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\v1_1\Test1BundleMigration11;
 
-use Oro\Bundle\MigrationBundle\Migration\MigrationExecutorWithNameGenerator;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongTableNameMigration;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongColumnNameMigration;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationExecutorWithNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongTableNameMigration;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongColumnNameMigration;
 
 class MigrationExecutorWithNameGeneratorTest extends AbstractTestMigrationExecutor
 {
@@ -102,11 +102,11 @@ class MigrationExecutorWithNameGeneratorTest extends AbstractTestMigrationExecut
         ];
         $this->expectException('\RuntimeException');
         $this->expectExceptionMessage(
-            'Failed migrations: Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongTableNameMigration.'
+            'Failed migrations: Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongTableNameMigration.'
         );
         $this->executor->executeUp($migrations);
         $this->assertEquals(
-            '> Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongTableNameMigration',
+            '> Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongTableNameMigration',
             $this->logger->getMessages()[0]
         );
         $this->assertEquals(
@@ -128,11 +128,11 @@ class MigrationExecutorWithNameGeneratorTest extends AbstractTestMigrationExecut
         ];
         $this->expectException('\RuntimeException');
         $this->expectExceptionMessage(
-            'Failed migrations: Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongColumnNameMigration.'
+            'Failed migrations: Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongColumnNameMigration.'
         );
         $this->executor->executeUp($migrations);
         $this->assertEquals(
-            '> Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongColumnNameMigration',
+            '> Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongColumnNameMigration',
             $this->logger->getMessages()[0]
         );
         $this->assertEquals(

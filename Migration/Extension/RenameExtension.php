@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Extension;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Extension;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
@@ -10,10 +10,10 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\Schema\Column;
-use Oro\Bundle\MigrationBundle\Migration\SqlSchemaUpdateMigrationQuery;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\Schema\Column;
+use Okvpn\Bundle\MigrationBundle\Migration\SqlSchemaUpdateMigrationQuery;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 
 class RenameExtension implements DatabasePlatformAwareInterface, NameGeneratorAwareInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Extension;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Extension;
 
 interface DataStorageExtensionAwareInterface
 {

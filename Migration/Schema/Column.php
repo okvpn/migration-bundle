@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Schema;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Schema;
 
 use Doctrine\DBAL\Schema\Column as BaseColumn;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle\Migrations\Schema\v1_0;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
 class Test2BundleMigration11 implements Migration, ContainerAwareInterface, OrderedMigrationInterface
 {

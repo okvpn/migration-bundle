@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Extension;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Extension;
 
-use Oro\Bundle\MigrationBundle\Migration\Extension\DataStorageExtension;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\DataStorageExtension;
 
 class DataStorageExtensionTest extends \PHPUnit_Framework_TestCase
 {

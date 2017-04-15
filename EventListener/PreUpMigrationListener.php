@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\EventListener;
+namespace Okvpn\Bundle\MigrationBundle\EventListener;
 
-use Oro\Bundle\MigrationBundle\Event\PreMigrationEvent;
-use Oro\Bundle\MigrationBundle\Migration\CreateMigrationTableMigration;
+use Okvpn\Bundle\MigrationBundle\Event\PreMigrationEvent;
+use Okvpn\Bundle\MigrationBundle\Migration\CreateMigrationTableMigration;
 
 class PreUpMigrationListener
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Migration;
 
 use Doctrine\DBAL\Schema\Table;
 

@@ -1,14 +1,14 @@
 parameters:
-    oro_migration.db_id_name_generator.class:            Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator
-    oro_migration.data_fixtures.loader.class:            Oro\Bundle\MigrationBundle\Migration\Loader\DataFixturesLoader
-    oro_migration.migrations.loader.class:               Oro\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader
-    oro_migration.migrations.query_executor.class:       Oro\Bundle\MigrationBundle\Migration\MigrationQueryExecutor
-    oro_migration.migrations.executor.class:             Oro\Bundle\MigrationBundle\Migration\MigrationExecutorWithNameGenerator
-    oro_migration.migration.pre_up.listener.class:       Oro\Bundle\MigrationBundle\EventListener\PreUpMigrationListener
-    oro_migration.migrations.extension_manager.class:    Oro\Bundle\MigrationBundle\Migration\MigrationExtensionManager
-    oro_migration.migration.extension.rename.class:      Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension
-    oro_migration.tools.schema_dumper.class:             Oro\Bundle\MigrationBundle\Tools\SchemaDumper
-    oro_migration.migration.extension.data_storage.class: Oro\Bundle\MigrationBundle\Migration\Extension\DataStorageExtension
+    oro_migration.db_id_name_generator.class:            Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator
+    oro_migration.data_fixtures.loader.class:            Okvpn\Bundle\MigrationBundle\Migration\Loader\DataFixturesLoader
+    oro_migration.migrations.loader.class:               Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader
+    oro_migration.migrations.query_executor.class:       Okvpn\Bundle\MigrationBundle\Migration\MigrationQueryExecutor
+    oro_migration.migrations.executor.class:             Okvpn\Bundle\MigrationBundle\Migration\MigrationExecutorWithNameGenerator
+    oro_migration.migration.pre_up.listener.class:       Okvpn\Bundle\MigrationBundle\EventListener\PreUpMigrationListener
+    oro_migration.migrations.extension_manager.class:    Okvpn\Bundle\MigrationBundle\Migration\MigrationExtensionManager
+    oro_migration.migration.extension.rename.class:      Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtension
+    oro_migration.tools.schema_dumper.class:             Okvpn\Bundle\MigrationBundle\Tools\SchemaDumper
+    oro_migration.migration.extension.data_storage.class: Okvpn\Bundle\MigrationBundle\Migration\Extension\DataStorageExtension
 services:
     oro_migration.db_id_name_generator:
         class: %oro_migration.db_id_name_generator.class%
@@ -66,7 +66,7 @@ services:
         lazy: true
 
     oro_migration.twig.schema_dumper:
-        class: Oro\Bundle\MigrationBundle\Twig\SchemaDumperExtension
+        class: Okvpn\Bundle\MigrationBundle\Twig\SchemaDumperExtension
         public: false
         arguments:
             - '@doctrine'
@@ -74,6 +74,6 @@ services:
             - { name: twig.extension }
 
     oro_migration.listener.console_command_listener:
-        class: Oro\Bundle\MigrationBundle\EventListener\ConsoleCommandListener
+        class: Okvpn\Bundle\MigrationBundle\EventListener\ConsoleCommandListener
         tags:
             - { name: kernel.event_listener, event: console.command, method: onConsoleCommand }

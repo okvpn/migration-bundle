@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\EventListener;
+namespace Okvpn\Bundle\MigrationBundle\EventListener;
 
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 

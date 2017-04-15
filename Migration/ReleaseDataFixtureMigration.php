@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Query\Expr;
 
-use Oro\Bundle\MigrationBundle\Migrations\Schema\v1_0\OroMigrationBundle as MigrationBundleMigration10;
+use Okvpn\Bundle\MigrationBundle\Migrations\Schema\v1_0\OroMigrationBundle as MigrationBundleMigration10;
 
 class ReleaseDataFixtureMigration implements Migration
 {

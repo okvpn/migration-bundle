@@ -1,10 +1,10 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Functional\DataFixtures;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\MigrationBundle\Entity\DataFixture;
+use Okvpn\Bundle\MigrationBundle\Entity\DataFixture;
 use Symfony\Component\Yaml\Yaml;
 
 class LoadDataFixtures extends AbstractFixture

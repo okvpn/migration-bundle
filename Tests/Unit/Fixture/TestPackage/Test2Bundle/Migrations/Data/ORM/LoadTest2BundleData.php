@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle\Migrations\Data\ORM;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -13,7 +13,7 @@ class LoadTest2BundleData extends AbstractFixture implements DependentFixtureInt
     public function getDependencies()
     {
         return [
-            'Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage'
+            'Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage'
             . '\Test1Bundle\Migrations\Data\ORM\LoadTest1BundleData'
         ];
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
 class IndexMigration implements Migration
 {

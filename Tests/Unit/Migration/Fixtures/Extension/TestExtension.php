@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 
 class TestExtension implements DatabasePlatformAwareInterface, NameGeneratorAwareInterface
 {

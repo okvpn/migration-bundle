@@ -1,12 +1,12 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\CreateMigrationTableMigration;
-use Oro\Bundle\MigrationBundle\Migration\MigrationState;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\UpdateBundleVersionMigration;
+use Okvpn\Bundle\MigrationBundle\Migration\CreateMigrationTableMigration;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationState;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\UpdateBundleVersionMigration;
 
 class UpdateBundleVersionMigrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -99,7 +99,7 @@ class UpdateBundleVersionMigrationTest extends \PHPUnit_Framework_TestCase
     protected function getMigration($bundleName, $version, $state = true)
     {
         $migration = new MigrationState(
-            $this->createMock('Oro\Bundle\MigrationBundle\Migration\Migration'),
+            $this->createMock('Okvpn\Bundle\MigrationBundle\Migration\Migration'),
             $bundleName,
             $version
         );

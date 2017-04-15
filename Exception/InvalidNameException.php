@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Exception;
+namespace Okvpn\Bundle\MigrationBundle\Exception;
 
 class InvalidNameException extends \Exception
 {

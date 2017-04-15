@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Twig;
+namespace Okvpn\Bundle\MigrationBundle\Twig;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Platforms\AbstractPlatform;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Fixture;
+namespace Okvpn\Bundle\MigrationBundle\Fixture;
 
 interface LoadedFixtureVersionAwareInterface
 {

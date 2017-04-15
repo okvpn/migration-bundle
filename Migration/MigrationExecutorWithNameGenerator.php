@@ -1,10 +1,10 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Migration;
 
-use Oro\Bundle\MigrationBundle\Exception\InvalidNameException;
-use Oro\Bundle\MigrationBundle\Migration\Schema\SchemaWithNameGenerator;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Exception\InvalidNameException;
+use Okvpn\Bundle\MigrationBundle\Migration\Schema\SchemaWithNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 
 class MigrationExecutorWithNameGenerator extends MigrationExecutor
 {

@@ -1,18 +1,18 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
-use Oro\Bundle\MigrationBundle\Migration\MigrationExtensionManager;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\InvalidAwareInterfaceExtension;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtension;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\AnotherTestExtension;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtensionDepended;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\MigrationWithTestExtension;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\NoAwareInterfaceExtension;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\AnotherNoAwareInterfaceExtension;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\MigrationWithTestExtensionDepended;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationExtensionManager;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\InvalidAwareInterfaceExtension;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtension;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\AnotherTestExtension;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtensionDepended;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\MigrationWithTestExtension;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\NoAwareInterfaceExtension;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\AnotherNoAwareInterfaceExtension;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\MigrationWithTestExtensionDepended;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 
 class MigrationExtensionManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -129,7 +129,7 @@ class MigrationExtensionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtensionWithNoAwareInterface()
     {
-        $dir = 'Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension';
+        $dir = 'Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension';
         $this->expectException('\RuntimeException');
         $this->expectExceptionMessage(
             sprintf(
@@ -146,7 +146,7 @@ class MigrationExtensionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAnotherExtensionWithNoAwareInterface()
     {
-        $dir = 'Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension';
+        $dir = 'Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension';
         $this->expectException('\RuntimeException');
         $this->expectExceptionMessage(
             sprintf(
@@ -162,7 +162,7 @@ class MigrationExtensionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtensionWithInvalidAwareInterface()
     {
-        $dir = 'Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension';
+        $dir = 'Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension';
         $this->expectException('\RuntimeException');
         $this->expectExceptionMessage(
             sprintf(

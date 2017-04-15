@@ -1,12 +1,12 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Loader;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Loader;
 
-use Oro\Bundle\MigrationBundle\Entity\DataFixture;
-use Oro\Bundle\MigrationBundle\Migration\Loader\DataFixturesLoader;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\TestPackageTest1Bundle;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle\TestPackageTest2Bundle;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test3Bundle\TestPackageTest3Bundle;
+use Okvpn\Bundle\MigrationBundle\Entity\DataFixture;
+use Okvpn\Bundle\MigrationBundle\Migration\Loader\DataFixturesLoader;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\TestPackageTest1Bundle;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle\TestPackageTest2Bundle;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test3Bundle\TestPackageTest3Bundle;
 
 class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -87,9 +87,9 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function getFixturesProvider()
     {
-        $test1BundleNamespace = 'Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle';
-        $test2BundleNamespace = 'Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle';
-        $test3BundleNamespace = 'Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test3Bundle';
+        $test1BundleNamespace = 'Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle';
+        $test2BundleNamespace = 'Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test2Bundle';
+        $test3BundleNamespace = 'Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test3Bundle';
 
         return [
             [
@@ -102,7 +102,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
                 [],
                 [
                     $test1BundleNamespace . '\Migrations\Data\ORM\LoadTest1BundleData',
-                    'Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
+                    'Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
                 ]
             ],
             [
@@ -118,7 +118,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
                 [
                     $test1BundleNamespace . '\Migrations\Data\ORM\LoadTest1BundleData',
                     $test2BundleNamespace . '\Migrations\Data\ORM\LoadTest2BundleData',
-                    'Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
+                    'Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
                 ]
             ],
             [
@@ -128,7 +128,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     $test2BundleNamespace . '\Migrations\Data\ORM\LoadTest2BundleData',
-                    'Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
+                    'Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
                 ]
             ],
             [
@@ -137,7 +137,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
                 [
                     $test1BundleNamespace . '\Migrations\Data\ORM\LoadTest1BundleData',
                     $test2BundleNamespace . '\Migrations\Data\ORM\LoadTest2BundleData',
-                    'Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
+                    'Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
                 ]
             ],
             [
@@ -147,7 +147,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     $test1BundleNamespace . '\Migrations\Data\ORM\LoadTest1BundleData',
-                    'Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
+                    'Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
                 ]
             ],
             [
@@ -156,7 +156,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
                 [
                     $test3BundleNamespace . '\Migrations\Data\ORM\LoadTest3BundleData1',
                     $test3BundleNamespace . '\Migrations\Data\ORM\LoadTest3BundleData2',
-                    'Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
+                    'Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
                 ]
             ],
             [
@@ -167,7 +167,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     $test3BundleNamespace . '\Migrations\Data\ORM\LoadTest3BundleData2',
-                    'Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
+                    'Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture',
                 ]
             ],
             [

@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Entity\Repository;
+namespace Okvpn\Bundle\MigrationBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Oro\Bundle\MigrationBundle\Entity\DataFixture;
+use Okvpn\Bundle\MigrationBundle\Entity\DataFixture;
 
 class DataFixtureRepository extends EntityRepository
 {

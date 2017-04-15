@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Schema;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Schema;
 
 use Doctrine\DBAL\Schema\Table as BaseTable;
 use Doctrine\DBAL\Schema\Column as BaseColumn;
@@ -14,7 +14,7 @@ class Table extends BaseTable
 {
     /**
      * Used column class, define COLUMN_CLASS constant in an extended class to extend the column class
-     * Important: your class must extend Oro\Bundle\MigrationBundle\Migration\Schema\Column class
+     * Important: your class must extend Okvpn\Bundle\MigrationBundle\Migration\Schema\Column class
      *            or extend Doctrine\DBAL\Schema\Column class and must have __construct(array $args) method
      */
     const COLUMN_CLASS = 'Doctrine\DBAL\Schema\Column';

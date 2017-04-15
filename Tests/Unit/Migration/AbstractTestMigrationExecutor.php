@@ -1,12 +1,12 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 
 use Oro\Bundle\CacheBundle\Manager\OroDataCacheManager;
-use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
-use Oro\Bundle\MigrationBundle\Migration\MigrationQueryExecutor;
+use Okvpn\Bundle\MigrationBundle\Migration\ArrayLogger;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationQueryExecutor;
 
 class AbstractTestMigrationExecutor extends \PHPUnit_Framework_TestCase
 {

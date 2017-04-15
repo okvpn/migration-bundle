@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
 class QueryBagTest extends \PHPUnit_Framework_TestCase
 {

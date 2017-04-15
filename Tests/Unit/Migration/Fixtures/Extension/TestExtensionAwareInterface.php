@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension;
 
 interface TestExtensionAwareInterface
 {

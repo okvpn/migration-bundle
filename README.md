@@ -30,10 +30,10 @@ Example of migration file:
 namespace Acme\Bundle\TestBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
-use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 
 class AcmeTestBundle implements Migration, RenameExtensionAwareInterface
 {
@@ -91,8 +91,8 @@ Example of install migration file:
 namespace Acme\Bundle\TestBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\Installation;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
 class AcmeTestBundleInstaller implements Installation
 {
@@ -162,10 +162,10 @@ Sometime you cannot use standard Doctrine methods for database structure modific
 namespace Acme\Bundle\TestBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
-use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 
 class AcmeTestBundle implements Migration, RenameExtensionAwareInterface
 {
@@ -214,7 +214,7 @@ To create your own extension you need too do the following simple steps:
 namespace Acme\Bundle\TestBundle\Migration\Extension;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
 class MyExtension
 {
@@ -292,7 +292,7 @@ namespace Acme\DemoBundle\Migrations\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
+use Okvpn\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
 class LoadSomeDataFixture extends AbstractFixture implements VersionedFixtureInterface
 {
@@ -328,8 +328,8 @@ namespace Acme\DemoBundle\Migrations\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
-use Oro\Bundle\MigrationBundle\Fixture\RequestVersionFixtureInterface;
+use Okvpn\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
+use Okvpn\Bundle\MigrationBundle\Fixture\RequestVersionFixtureInterface;
 
 class LoadSomeDataFixture extends AbstractFixture implements VersionedFixtureInterface, LoadedFixtureVersionAwareInterface
 {

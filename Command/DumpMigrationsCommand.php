@@ -1,12 +1,11 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Command;
+namespace Okvpn\Bundle\MigrationBundle\Command;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -38,11 +37,6 @@ class DumpMigrationsCommand extends ContainerAwareCommand
      * @var string
      */
     protected $version;
-
-    /**
-     * @var ConfigManager
-     */
-    protected $configManager;
 
     /**
      * {@inheritdoc}
@@ -128,56 +122,13 @@ class DumpMigrationsCommand extends ContainerAwareCommand
                                 $this->allowedTables[$joinTableName] = true;
                             }
                         }
-                        $this->initializeExtendedFieldsOptions($entityMetadata);
+                        //$this->initializeExtendedFieldsOptions($entityMetadata);
                     }
                 } else {
-                    $this->initializeExtendedFieldsOptions($entityMetadata);
+                    //$this->initializeExtendedFieldsOptions($entityMetadata);
                 }
             }
         );
-    }
-
-    /**
-     * Initialize extended field options by field.
-     *
-     * @param ClassMetadata $classMetadata
-     */
-    protected function initializeExtendedFieldsOptions(ClassMetadata $classMetadata)
-    {
-        $configManager = $this->getConfigManager();
-        $className = $classMetadata->getName();
-        $tableName = $classMetadata->getTableName();
-        foreach ($classMetadata->getFieldNames() as $fieldName) {
-            if ($configManager->hasConfig($className, $fieldName)) {
-                $columnName = $classMetadata->getColumnName($fieldName);
-                $options = $this->getExtendedFieldOptions($className, $fieldName);
-                if (!empty($options['extend']['is_extend'])) {
-                    $this->extendedFieldOptions[$tableName][$columnName] = $options;
-                }
-            }
-        }
-    }
-
-    /**
-     * Get extended field options.
-     *
-     * @param string $className
-     * @param string $fieldName
-     * @return array
-     */
-    protected function getExtendedFieldOptions($className, $fieldName)
-    {
-        $configManager = $this->getConfigManager();
-        $config = array();
-        foreach ($configManager->getProviders() as $provider) {
-            $fieldId = $provider->getId($className, $fieldName);
-            $extendedConfig = $configManager->getConfig($fieldId)->all();
-            if (!empty($extendedConfig)) {
-                $config[$provider->getScope()] = $extendedConfig;
-            }
-        }
-
-        return $config;
     }
 
     /**
@@ -198,17 +149,5 @@ class DumpMigrationsCommand extends ContainerAwareCommand
                 $this->extendedFieldOptions
             )
         );
-    }
-
-    /**
-     * @return ConfigManager
-     */
-    protected function getConfigManager()
-    {
-        if (!$this->configManager) {
-            $this->configManager = $this->getContainer()->get('oro_entity_config.config_manager');
-        }
-
-        return $this->configManager;
     }
 }

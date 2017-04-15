@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
-use Oro\Bundle\MigrationBundle\Migration\MigrationQueryExecutor;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationQueryExecutor;
 
 class MigrationQueryExecutorTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,7 +61,7 @@ class MigrationQueryExecutorTest extends \PHPUnit_Framework_TestCase
     {
         $query = $this
             ->getMockForAbstractClass(
-                'Oro\Bundle\MigrationBundle\Migration\MigrationQuery',
+                'Okvpn\Bundle\MigrationBundle\Migration\MigrationQuery',
                 [],
                 '',
                 true,
@@ -82,7 +82,7 @@ class MigrationQueryExecutorTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteConnectionAwareMigrationQuery()
     {
-        $query = $this->getMockBuilder('Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery')
+        $query = $this->getMockBuilder('Okvpn\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -100,7 +100,7 @@ class MigrationQueryExecutorTest extends \PHPUnit_Framework_TestCase
     {
         $queryDescription = 'test query';
 
-        $query = $this->createMock('Oro\Bundle\MigrationBundle\Migration\MigrationQuery');
+        $query = $this->createMock('Okvpn\Bundle\MigrationBundle\Migration\MigrationQuery');
 
         $query->expects($this->once())
             ->method('getDescription')
@@ -120,7 +120,7 @@ class MigrationQueryExecutorTest extends \PHPUnit_Framework_TestCase
     {
         $queryDescription = ['test query 1', 'test query 2'];
 
-        $query = $this->createMock('Oro\Bundle\MigrationBundle\Migration\MigrationQuery');
+        $query = $this->createMock('Okvpn\Bundle\MigrationBundle\Migration\MigrationQuery');
 
         $query->expects($this->once())
             ->method('getDescription')
@@ -143,7 +143,7 @@ class MigrationQueryExecutorTest extends \PHPUnit_Framework_TestCase
     {
         $queryDescription = null;
 
-        $query = $this->createMock('Oro\Bundle\MigrationBundle\Migration\MigrationQuery');
+        $query = $this->createMock('Okvpn\Bundle\MigrationBundle\Migration\MigrationQuery');
 
         $query->expects($this->once())
             ->method('getDescription')

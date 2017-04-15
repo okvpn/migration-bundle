@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Extension;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Extension;
 
-use Oro\Bundle\MigrationBundle\Migration\DataStorageInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\DataStorageInterface;
 
 /**
  * This extension can be used if you need to exchange data between different migrations

@@ -1,19 +1,31 @@
 {
-    "name": "oro/migration-bundle",
+    "name": "okvpn/migration-bundle",
     "type": "symfony-bundle",
-    "description": "Schema and data migration for BAP",
-    "keywords": ["BAP", "Migration", "Schema", "Data", "Fixtures"],
-    "homepage": "https://github.com/laboro/MigrationBundle",
+    "description": "Database Schema migrations using Doctrine",
+    "keywords": ["Migration", "Schema", "Data", "Fixtures"],
+    "homepage": "https://github.com/okvpn/migration-bundle",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Oro, Inc",
+            "homepage": "http://www.orocrm.com"
+        },
+        {
+            "name": "Tsykun Vladimir",
+            "email": "vtsykun@okvpn.org"
+        }
+    ],
     "require": {
-        "php": ">=5.6",
-        "symfony/framework-bundle": "2.8.*",
-        "oro/log": "dev-master"
+        "php": ">=5.5.9",
+        "symfony/framework-bundle": "~2.7|~3.0",
+        "doctrine/data-fixtures": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
     },
     "autoload": {
-        "psr-0": { "Oro\\Bundle\\MigrationBundle": "" }
+        "psr-4": { "Okvpn\\Bundle\\MigrationBundle\\": "" }
     },
-    "target-dir": "Oro/Bundle/MigrationBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"

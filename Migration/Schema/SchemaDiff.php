@@ -7,10 +7,10 @@
 // for existing database and require a lot of effort from developers
 // to prepare proper migrations as well.
 // For details see _toSql and disableIndicesRenaming methods.
-// {@see \Oro\Bundle\MigrationBundle\EventListener\ConsoleCommandListener::onConsoleCommand}
+// {@see \Okvpn\Bundle\MigrationBundle\EventListener\ConsoleCommandListener::onConsoleCommand}
 // @todo because of this change we have to watch changes in Doctrine\DBAL\Schema\SchemaDiff
 
-namespace Oro\Bundle\MigrationBundle\Migration\Schema;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 

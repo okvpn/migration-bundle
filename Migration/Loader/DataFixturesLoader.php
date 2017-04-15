@@ -1,17 +1,17 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Loader;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Loader;
 
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 
-use Oro\Bundle\MigrationBundle\Entity\DataFixture;
-use Oro\Bundle\MigrationBundle\Migration\Sorter\DataFixturesSorter;
-use Oro\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture;
-use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
-use Oro\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Entity\DataFixture;
+use Okvpn\Bundle\MigrationBundle\Migration\Sorter\DataFixturesSorter;
+use Okvpn\Bundle\MigrationBundle\Migration\UpdateDataFixturesFixture;
+use Okvpn\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
+use Okvpn\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
 
 class DataFixturesLoader extends ContainerAwareLoader
 {

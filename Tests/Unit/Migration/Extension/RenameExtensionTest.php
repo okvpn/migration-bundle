@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Extension;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Extension;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
@@ -13,10 +13,10 @@ use Doctrine\DBAL\Schema\Sequence;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 
-use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
-use Oro\Bundle\MigrationBundle\Migration\MigrationQuery;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationQuery;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 
 class RenameExtensionTest extends \PHPUnit_Framework_TestCase
 {

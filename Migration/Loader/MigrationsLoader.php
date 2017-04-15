@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Loader;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Loader;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -11,14 +11,14 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\MigrationState;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-use Oro\Bundle\MigrationBundle\Migration\UpdateBundleVersionMigration;
-use Oro\Bundle\MigrationBundle\Event\MigrationEvents;
-use Oro\Bundle\MigrationBundle\Event\PostMigrationEvent;
-use Oro\Bundle\MigrationBundle\Event\PreMigrationEvent;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationState;
+use Okvpn\Bundle\MigrationBundle\Migration\Installation;
+use Okvpn\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\UpdateBundleVersionMigration;
+use Okvpn\Bundle\MigrationBundle\Event\MigrationEvents;
+use Okvpn\Bundle\MigrationBundle\Event\PostMigrationEvent;
+use Okvpn\Bundle\MigrationBundle\Event\PreMigrationEvent;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -381,7 +381,7 @@ class MigrationsLoader
             $reflClass  = new \ReflectionClass($className);
             $sourceFile = $reflClass->getFileName();
             if (isset($files['migrations'][$sourceFile])) {
-                if (is_subclass_of($className, 'Oro\Bundle\MigrationBundle\Migration\Migration')) {
+                if (is_subclass_of($className, 'Okvpn\Bundle\MigrationBundle\Migration\Migration')) {
                     $migration = new $className;
                     if (isset($migrations[$sourceFile])) {
                         throw new \RuntimeException('A migration script must contains only one class.');
@@ -392,7 +392,7 @@ class MigrationsLoader
                     $migrations[$sourceFile] = $migration;
                 }
             } elseif (isset($files['installers'][$sourceFile])) {
-                if (is_subclass_of($className, 'Oro\Bundle\MigrationBundle\Migration\Installation')) {
+                if (is_subclass_of($className, 'Okvpn\Bundle\MigrationBundle\Migration\Installation')) {
                     $installer = new $className;
                     if (isset($migrations[$sourceFile])) {
                         throw new \RuntimeException('An installation  script must contains only one class.');

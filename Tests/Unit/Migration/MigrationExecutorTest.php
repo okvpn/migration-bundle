@@ -1,18 +1,18 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
 
-use Oro\Bundle\MigrationBundle\Migration\MigrationExecutor;
-use Oro\Bundle\MigrationBundle\Migration\MigrationState;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\SqlSchemaUpdateMigrationQuery;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\IndexMigration;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\Test1BundleInstallation;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationExecutor;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationState;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\SqlSchemaUpdateMigrationQuery;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\IndexMigration;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\Test1BundleInstallation;
 
 class MigrationExecutorTest extends AbstractTestMigrationExecutor
 {
@@ -49,20 +49,20 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
 
         $this->expectException('\RuntimeException');
         $this->expectExceptionMessage(
-            'Failed migrations: Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\InvalidIndexMigration.'
+            'Failed migrations: Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\InvalidIndexMigration.'
         );
         $this->cacheManager->expects($this->never())
             ->method('clear');
 
         $this->executor->executeUp($migrationsToExecute);
         $this->assertEquals(
-            '> Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\InvalidIndexMigration',
+            '> Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\InvalidIndexMigration',
             $this->logger->getMessages()[0]
         );
         $this->assertEquals(
             '  ERROR: Could not create index for column with length more than 255.'
             . ' Please correct "key" column length "index_table" in table in'
-            . ' "Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\InvalidIndexMigration" migration',
+            . ' "Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\InvalidIndexMigration" migration',
             $this->logger->getMessages()[1]
         );
     }
@@ -79,24 +79,24 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
 
         $this->expectException('\RuntimeException');
         $this->expectExceptionMessage(
-            'Failed migrations: Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration.'
+            'Failed migrations: Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration.'
         );
         $this->cacheManager->expects($this->never())
             ->method('clear');
 
         $this->executor->executeUp($migrationsToExecute);
         $this->assertEquals(
-            '> Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration',
+            '> Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration',
             $this->logger->getMessages()[2]
         );
         $this->assertEquals(
             '  ERROR: Could not create index for column with length more than 255.'
             . ' Please correct "key" column length "index_table2" in table in'
-            . ' "Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration" migration',
+            . ' "Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration" migration',
             $this->logger->getMessages()[3]
         );
         $this->assertEquals(
-            '> Oro\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema'
+            '> Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema'
             . '\Test1BundleInstallation - skipped',
             $this->logger->getMessages()[4]
         );
@@ -112,7 +112,7 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
 
         $schemaUpdateQuery = new SqlSchemaUpdateMigrationQuery('ALTER TABLE');
 
-        $migration = $this->createMock('Oro\Bundle\MigrationBundle\Migration\Migration');
+        $migration = $this->createMock('Okvpn\Bundle\MigrationBundle\Migration\Migration');
         $migration->expects($this->once())
             ->method('up')
             ->willReturnCallback(

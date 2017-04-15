@@ -1,16 +1,16 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures;
+namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtension;
-use Oro\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtensionAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
+use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtension;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration\Fixtures\Extension\TestExtensionAwareInterface;
 
 class MigrationWithTestExtension implements
     Migration,

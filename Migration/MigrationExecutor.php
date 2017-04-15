@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Migration;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
@@ -17,8 +17,7 @@ use Doctrine\DBAL\Schema\TableDiff;
 
 use Psr\Log\LoggerInterface;
 
-use Oro\Bundle\CacheBundle\Manager\OroDataCacheManager;
-use Oro\Bundle\MigrationBundle\Exception\InvalidNameException;
+use Okvpn\Bundle\MigrationBundle\Exception\InvalidNameException;
 
 class MigrationExecutor
 {
@@ -26,11 +25,6 @@ class MigrationExecutor
      * @var MigrationQueryExecutor
      */
     protected $queryExecutor;
-
-    /**
-     * @var OroDataCacheManager
-     */
-    protected $cacheManager;
 
     /**
      * @var LoggerInterface
@@ -44,12 +38,10 @@ class MigrationExecutor
 
     /**
      * @param MigrationQueryExecutor $queryExecutor
-     * @param OroDataCacheManager $cacheManager
      */
-    public function __construct(MigrationQueryExecutor $queryExecutor, OroDataCacheManager $cacheManager)
+    public function __construct(MigrationQueryExecutor $queryExecutor)
     {
         $this->queryExecutor = $queryExecutor;
-        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -117,8 +109,6 @@ class MigrationExecutor
         if (!empty($failedMigrations)) {
             throw new \RuntimeException(sprintf('Failed migrations: %s.', implode(', ', $failedMigrations)));
         }
-
-        $this->cacheManager->clear();
     }
 
     /**

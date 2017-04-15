@@ -1,5 +1,5 @@
 fixture.1:
-    className: 'Oro\Bundle\MigrationBundle\Migrations\Data\ORM\Fixture1'
+    className: 'Okvpn\Bundle\MigrationBundle\Migrations\Data\ORM\Fixture1'
 
 fixture.2:
-    className: 'Oro\Bundle\MigrationBundle\Migrations\Data\ORM\Fixture2'
+    className: 'Okvpn\Bundle\MigrationBundle\Migrations\Data\ORM\Fixture2'

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration\Sorter;
+namespace Okvpn\Bundle\MigrationBundle\Migration\Sorter;
 
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
