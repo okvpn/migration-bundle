@@ -4,9 +4,9 @@ namespace Okvpn\Bundle\MigrationBundle\Event;
 
 use Doctrine\DBAL\Connection;
 
+use Okvpn\Bundle\MigrationBundle\Tools\SafeDatabaseChecker;
 use Symfony\Component\EventDispatcher\Event;
 
-use Oro\Bundle\EntityBundle\Tools\SafeDatabaseChecker;
 use Okvpn\Bundle\MigrationBundle\Migration\Migration;
 
 class MigrationEvent extends Event

@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 use Okvpn\Bundle\MigrationBundle\DependencyInjection\Compiler\MigrationExtensionPass;
 
-class OroMigrationBundle extends Bundle
+class OkvpnMigrationBundle extends Bundle
 {
     /**
      * {@inheritdoc}

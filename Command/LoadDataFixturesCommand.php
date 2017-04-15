@@ -10,7 +10,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
-
 class LoadDataFixturesCommand extends ContainerAwareCommand
 {
     const COMMAND_NAME = 'oro:migration:data:load';
@@ -60,10 +59,6 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->checkDisableListeners($input)) {
-            $this->disableDefaultListeners();
-        }
-
         $fixtures = null;
         try {
             $fixtures = $this->getFixtures($input, $output);
@@ -81,12 +76,6 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
                 $this->processFixtures($input, $output, $fixtures);
             }
         }
-
-        if ($this->checkDisableListeners($input)) {
-            $this->scheduleSearchReindexAndUpdateEmailAssociation();
-            $this->enableDefaultListeners();
-        }
-
         return 0;
     }
 
@@ -98,7 +87,6 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
      */
     protected function getFixtures(InputInterface $input, OutputInterface $output)
     {
-        /** @var DataFixturesLoader $loader */
         $loader              = $this->getContainer()->get('okvpn_migration.data_fixtures.loader');
         $bundles             = $input->getOption('bundles');
         $excludeBundles      = $input->getOption('exclude');
@@ -186,82 +174,5 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
             : self::MAIN_FIXTURES_PATH;
 
         return str_replace('/', DIRECTORY_SEPARATOR, '/' . $fixtureRelativePath);
-    }
-
-    /**
-     * If we don't receive a disabled-listeners option we disable four listeners by default:
-     * - SearchIndex listener (to prevent a lot of reindex messages)
-     * - EntityListener in EmailBundle (to prevent a lot of UpdateEmailAssociations messages)
-     * - WorkflowEventTrigger (to prevent additional reindexing)
-     * - SendChangedEntitiesToMessageQueueListener (to prevent data audit for the loaded demo-data)
-     * After loading the demo data we send the messages manually and re-enable the listeners
-     */
-    protected function disableDefaultListeners()
-    {
-        $this->getOptionalListenerManager()->disableListeners($this->getListenersToDisable());
-    }
-
-    protected function enableDefaultListeners()
-    {
-        $this->getOptionalListenerManager()->enableListeners($this->getListenersToDisable());
-    }
-
-    protected function scheduleSearchReindexAndUpdateEmailAssociation()
-    {
-        $this->getSearchIndexer()->reindex();
-
-        $this
-            ->getProducer()
-            ->send(EmailTopics::UPDATE_ASSOCIATIONS_TO_EMAILS, []);
-    }
-
-    /**
-     * @param InputInterface $input
-     *
-     * @return bool
-     */
-    protected function checkDisableListeners(InputInterface $input)
-    {
-        return (
-            ! $input->getOption('disabled-listeners') &&
-            $input->getOption('fixtures-type') !== self::MAIN_FIXTURES_TYPE
-        );
-    }
-
-    /**
-     * @return array
-     */
-    protected function getListenersToDisable()
-    {
-        return [
-            'oro_search.index_listener',
-            'oro_email.listener.entity_listener',
-            'oro_workflow.listener.event_trigger_collector',
-            'oro_dataaudit.listener.send_changed_entities_to_message_queue'
-        ];
-    }
-
-    /**
-     * @return OptionalListenerManager
-     */
-    protected function getOptionalListenerManager()
-    {
-        return $this->getContainer()->get('oro_platform.optional_listeners.manager');
-    }
-
-    /**
-     * @return IndexerInterface
-     */
-    protected function getSearchIndexer()
-    {
-        return $this->getContainer()->get('oro_search.async.indexer');
-    }
-
-    /**
-     * @return MessageProducerInterface
-     */
-    protected function getProducer()
-    {
-        return $this->getContainer()->get('oro_message_queue.client.message_producer');
     }
 }
