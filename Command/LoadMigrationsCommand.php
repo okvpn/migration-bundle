@@ -2,13 +2,14 @@
 
 namespace Okvpn\Bundle\MigrationBundle\Command;
 
+use Psr\Log\LogLevel;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Oro\Component\Log\OutputLogger;
-use Oro\Bundle\EntityConfigBundle\Tools\CommandExecutor;
 use Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader;
 use Okvpn\Bundle\MigrationBundle\Migration\MigrationExecutor;
 
@@ -19,7 +20,7 @@ class LoadMigrationsCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('oro:migration:load')
+        $this->setName('okvpn:migration:load')
             ->setDescription('Execute migration scripts.')
             ->addOption(
                 'force',
@@ -50,13 +51,6 @@ class LoadMigrationsCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'A list of bundle names which migrations should be skipped.'
-            )
-            ->addOption(
-                'timeout',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Timeout for child command execution',
-                CommandExecutor::DEFAULT_TIMEOUT
             );
     }
 
@@ -67,7 +61,6 @@ class LoadMigrationsCommand extends ContainerAwareCommand
     {
         $force = $input->getOption('force');
         $dryRun = $input->getOption('dry-run');
-        $this->initCommandExecutor($input);
 
         if ($force || $dryRun) {
             $output->writeln($dryRun ? 'List of migrations:' : 'Process migrations...');
@@ -80,15 +73,15 @@ class LoadMigrationsCommand extends ContainerAwareCommand
                         $output->writeln(sprintf('  <comment>> %s</comment>', get_class($item->getMigration())));
                     }
                 } else {
-                    $logger      = new OutputLogger($output, true, null, '  ');
-                    $queryLogger = new OutputLogger(
+
+                    $showQueries = $input->getOption('show-queries');
+                    $queryLogger = $this->getConsoleLogger(
                         $output,
-                        true,
-                        $input->getOption('show-queries') ? null : OutputInterface::VERBOSITY_QUIET,
-                        '    '
+                        $showQueries ? OutputInterface::VERBOSITY_NORMAL: OutputInterface::VERBOSITY_QUIET
                     );
-                    $executor    = $this->getMigrationExecutor($input);
-                    $executor->setLogger($logger);
+
+                    $executor = $this->getMigrationExecutor();
+                    $executor->setLogger($this->getConsoleLogger($output));
                     $executor->getQueryExecutor()->setLogger($queryLogger);
                     $executor->executeUp($migrations, $input->getOption('dry-run'));
                 }
@@ -123,28 +116,31 @@ class LoadMigrationsCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface $input
      * @return MigrationExecutor
      */
-    protected function getMigrationExecutor(InputInterface $input)
+    protected function getMigrationExecutor()
     {
         return $this->getContainer()->get('okvpn_migration.migrations.executor');
     }
 
     /**
-     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param int $debug
+     * @return ConsoleLogger
      */
-    protected function initCommandExecutor(InputInterface $input)
+    protected function getConsoleLogger(OutputInterface $output, $debug = OutputInterface::VERBOSITY_NORMAL)
     {
-        /** @var CommandExecutor $commandExecutor */
-        $commandExecutor = $this->getContainer()->get('oro_entity_config.tools.command_executor');
+        $logger = new ConsoleLogger($output, [
+            LogLevel::EMERGENCY => OutputInterface::VERBOSITY_NORMAL,
+            LogLevel::ALERT => OutputInterface::VERBOSITY_NORMAL,
+            LogLevel::CRITICAL => OutputInterface::VERBOSITY_NORMAL,
+            LogLevel::ERROR => OutputInterface::VERBOSITY_NORMAL,
+            LogLevel::WARNING => OutputInterface::VERBOSITY_NORMAL,
+            LogLevel::NOTICE => OutputInterface::VERBOSITY_NORMAL,
+            LogLevel::INFO => $debug,
+            LogLevel::DEBUG => $debug,
+        ]);
 
-        $timeout = $input->getOption('timeout');
-        if ($timeout >= 0) {
-            $commandExecutor->setDefaultOption('process-timeout', $timeout);
-        }
-        if (true === $input->getOption('no-debug')) {
-            $commandExecutor->setDefaultOption('no-debug');
-        }
+        return $logger;
     }
 }

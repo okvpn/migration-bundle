@@ -7,14 +7,14 @@ use Doctrine\DBAL\Schema\Schema;
 use Okvpn\Bundle\MigrationBundle\Migration\Installation;
 use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroMigrationBundleInstaller implements Installation
+class OkvpnMigrationBundleInstaller implements Installation
 {
     /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
-        return 'v1_1';
+        return 'v1_0';
     }
 
     /**
@@ -22,7 +22,7 @@ class OroMigrationBundleInstaller implements Installation
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->createOroMigrationsDataTable($schema);
+        $this->createOkvpnMigrationsDataTable($schema);
     }
 
     /**
@@ -30,7 +30,7 @@ class OroMigrationBundleInstaller implements Installation
      *
      * @param Schema $schema
      */
-    protected function createOroMigrationsDataTable(Schema $schema)
+    protected function createOkvpnMigrationsDataTable(Schema $schema)
     {
         $table = $schema->createTable('okvpn_migrations_data');
         $table->addColumn('id', 'integer', ['notnull' => true, 'autoincrement' => true]);
