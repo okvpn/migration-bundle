@@ -37,7 +37,7 @@ class UpdateDataFixturesFixture extends AbstractFixture
                 $dataFixture = null;
                 if ($version !== null) {
                     $dataFixture = $manager
-                        ->getRepository('OroMigrationBundle:DataFixture')
+                        ->getRepository('OkvpnMigrationBundle:DataFixture')
                         ->findOneBy(['className' => $className]);
                 }
                 if (!$dataFixture) {

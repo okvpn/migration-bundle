@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class LoadDataFixturesCommand extends ContainerAwareCommand
 {
-    const COMMAND_NAME = 'oro:migration:data:load';
+    const COMMAND_NAME = 'okvpn:migration:data:load';
 
     const MAIN_FIXTURES_TYPE = 'main';
     const DEMO_FIXTURES_TYPE = 'demo';

@@ -1,4 +1,4 @@
-OroMigrationBundle
+OkvpnMigrationBundle
 ==================
 
 Database structure and data manipulator.
@@ -118,7 +118,7 @@ class AcmeTestBundleInstaller implements Installation
 
 ```
 
-To run migrations, there is **oro:migration:load** command. This command collects migration files from bundles, sorts them by version number and applies changes.
+To run migrations, there is **okvpn:migration:load** command. This command collects migration files from bundles, sorts them by version number and applies changes.
 
 This command supports some additional options:
 
@@ -128,7 +128,7 @@ This command supports some additional options:
  - **bundles** - A list of bundles to load data from. If option is not set, migrations will be taken from all bundles;
  - **exclude** - A list of bundle names which migrations should be skipped.
 
-Also there is **oro:migration:dump** command to help in creation installation files. This command outputs current database structure as a plain sql or as `Doctrine\DBAL\Schema\Schema` queries.
+Also there is **okvpn:migration:dump** command to help in creation installation files. This command outputs current database structure as a plain sql or as `Doctrine\DBAL\Schema\Schema` queries.
 
 This command supports some additional options:
 
@@ -141,16 +141,9 @@ Good practice for bundle is to have installation file for current version and mi
 Next algorithm may be used for new versions of your bundle:
 
  - Create new migration
- - Apply it with **oro:migration:load**
- - Generate fresh installation file with **oro:migration:dump**
+ - Apply it with **okvpn:migration:load**
+ - Generate fresh installation file with **okvpn:migration:dump**
  - If required - add migration extensions calls to generated installation.
-
-Examples of database structure migrations
------------------------------------------
-
- - [Simple migration](../UserBundle/Migrations/Schema/v1_0/OroUserBundle.php)
- - [Installer](../InstallerBundle/Migrations/Schema)
- - [Complex migration](../EntityConfigBundle/Migrations/Schema/v1_2)
 
 
 Extensions for database structure migrations
@@ -266,7 +259,7 @@ Data fixtures
 
 Symfony allows to load data using data fixtures. But these fixtures are run each time when `doctrine:fixtures:load` command is executed.
 
-To avoid loading the same fixture several time, **oro:migration:data:load** command was created. This command guarantees that each data fixture will be loaded only once.
+To avoid loading the same fixture several time, **okvpn:migration:data:load** command was created. This command guarantees that each data fixture will be loaded only once.
 
 This command supports two types of migration files: `main` data fixtures and `demo` data fixtures. During an installation, user can select to load or not demo data.
 

@@ -43,7 +43,7 @@ class DumpMigrationsCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('oro:migration:dump')
+        $this->setName('okvpn:migration:dump')
             ->addOption('plain-sql', null, InputOption::VALUE_NONE, 'Out schema as plain sql queries')
             ->addOption(
                 'bundle',

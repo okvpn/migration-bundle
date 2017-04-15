@@ -20,7 +20,7 @@ class LoadMigrationsCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('oro:migration:load')
+        $this->setName('okvpn:migration:load')
             ->setDescription('Execute migration scripts.')
             ->addOption(
                 'force',

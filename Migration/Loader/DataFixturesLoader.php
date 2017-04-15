@@ -83,7 +83,7 @@ class DataFixturesLoader extends ContainerAwareLoader
         if (!$this->loadedFixtures) {
             $this->loadedFixtures = [];
 
-            $loadedFixtures = $this->em->getRepository('OroMigrationBundle:DataFixture')->findAll();
+            $loadedFixtures = $this->em->getRepository('OkvpnMigrationBundle:DataFixture')->findAll();
             /** @var DataFixture $fixture */
             foreach ($loadedFixtures as $fixture) {
                 $this->loadedFixtures[$fixture->getClassName()] = $fixture->getVersion() ?: '0.0';
