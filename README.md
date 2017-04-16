@@ -12,6 +12,16 @@ The ORO developers made a great tool, but they are not interested in reuse their
 separately from the platform (BAP). So we forked this bundle and removed all BAP dependencies, like as 
 [EmailBundle, MessageQueue, SearchBundle](https://github.com/orocrm/platform/blob/2.1/src/Oro/Bundle/MigrationBundle/Command/LoadDataFixturesCommand.php#L13-L17) etc.
 
+Features
+--------
+- Write database migrations using database agnostic PHP code.
+- Locate migrations inside each bundle.
+- Compatible with different versions of Doctrine and Symfony.
+- Load demo data fixture.
+- Extensions for database structure migrations.
+- Ability to disable event-listener during the load fixtures.
+- Events before and after migrations.
+
 Installations
 -------------
 
