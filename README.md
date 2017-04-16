@@ -17,7 +17,7 @@ Installations
 
 Install using composer:
 ```
-composer require ramunasd/migration-bundle
+composer require okvpn/migration-bundle
 ```
 
 And add this bundle to your AppKernel:
