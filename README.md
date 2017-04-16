@@ -3,6 +3,48 @@ OkvpnMigrationBundle
 
 Database structure and data manipulator.
 
+![OkvpnMigrationBundle](./Resources/doc/okvpn-migration.png)
+
+Purpose
+-------
+MigrationBundle is subtree split of the [OroMigrationBundle](https://github.com/orocrm/platform/tree/master/src/Oro/Bundle/MigrationBundle).
+The ORO developers made a great tool, but they are not interested in reused their components
+separately from the platform (BAP). So we forked this bundle and removed all BAP dependencies, like as 
+[EmailBundle, MessageQueue, SearchBundle](https://github.com/orocrm/platform/blob/2.1/src/Oro/Bundle/MigrationBundle/Command/LoadDataFixturesCommand.php#L13-L17) etc.
+
+Installations
+-------------
+
+Install using composer:
+```
+composer require ramunasd/migration-bundle
+```
+
+And add this bundle to your AppKernel:
+
+```php
+<?php
+
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Config\Loader\LoaderInterface;
+
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        $bundles = array(
+            new Okvpn\Bundle\MigrationBundle\OkvpnMigrationBundle(),
+            //...
+        );
+    }
+    
+    public function registerContainerConfiguration(LoaderInterface $loader)
+    {
+        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+    }
+}
+```
+
 Database structure migrations
 -----------------------------
 
