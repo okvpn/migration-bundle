@@ -77,7 +77,7 @@ class LoadMigrationsCommand extends ContainerAwareCommand
                     $showQueries = $input->getOption('show-queries');
                     $queryLogger = $this->getConsoleLogger(
                         $output,
-                        $showQueries ? OutputInterface::VERBOSITY_NORMAL: OutputInterface::VERBOSITY_QUIET
+                        $showQueries ? OutputInterface::VERBOSITY_NORMAL: OutputInterface::VERBOSITY_VERBOSE
                     );
 
                     $executor = $this->getMigrationExecutor();

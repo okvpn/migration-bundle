@@ -51,7 +51,6 @@ services:
         class: Okvpn\Bundle\MigrationBundle\Tools\SchemaDumper
         arguments:
             - '@twig'
-        lazy: true
 
     okvpn_migration.twig.schema_dumper:
         class: Okvpn\Bundle\MigrationBundle\Twig\SchemaDumperExtension
