@@ -8,9 +8,7 @@ Database structure and data manipulator.
 Purpose
 -------
 MigrationBundle is subtree split of the [OroMigrationBundle](https://github.com/orocrm/platform/tree/master/src/Oro/Bundle/MigrationBundle).
-The ORO developers made a great tool, but they are not interested in reuse their components
-separately from the platform (BAP). So we forked this bundle and removed all BAP dependencies, like as 
-[EmailBundle, MessageQueue, SearchBundle](https://github.com/orocrm/platform/blob/2.1/src/Oro/Bundle/MigrationBundle/Command/LoadDataFixturesCommand.php#L13-L17) etc.
+The ORO developers made a great tool, but it has very strong dependencies on other ORO Platform bundles (like as [EmailBundle, MessageQueue, SearchBundle](https://github.com/orocrm/platform/blob/2.1/src/Oro/Bundle/MigrationBundle/Command/LoadDataFixturesCommand.php#L13-L17)  etc.). So we forked this bundle and removed BAP dependencies, that makes this bundle more reusable in non-Oro Platform projects
 
 Features
 --------
