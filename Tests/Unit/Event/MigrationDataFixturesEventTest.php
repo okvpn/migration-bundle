@@ -4,8 +4,8 @@ namespace Oro\Bundle\MigrationBundle\Tests\Unit\Event;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\MigrationBundle\Event\MigrationDataFixturesEvent;
-use Oro\Bundle\MigrationBundle\Migration\DataFixturesExecutorInterface;
+use Okvpn\Bundle\MigrationBundle\Event\MigrationDataFixturesEvent;
+use Okvpn\Bundle\MigrationBundle\Migration\DataFixturesExecutorInterface;
 
 class MigrationDataFixturesEventTest extends \PHPUnit_Framework_TestCase
 {

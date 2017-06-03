@@ -8,9 +8,6 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@service_container'
 
-    okvpn_migration.migrations.loader:
-        class: Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader
-
     okvpn_migration.data_fixtures.executor:
         class: Okvpn\Bundle\MigrationBundle\Migration\DataFixturesExecutor
         arguments:

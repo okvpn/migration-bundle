@@ -149,13 +149,13 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
             )
         );
 
-        $executor = new ORMExecutor($this->getContainer()->get('doctrine.orm.entity_manager'));
+        $executor = $this->getContainer()->get('okvpn_migration.data_fixtures.executor');
         $executor->setLogger(
             function ($message) use ($output) {
                 $output->writeln(sprintf('  <comment>></comment> <info>%s</info>', $message));
             }
         );
-        $executor->execute($fixtures, true);
+        $executor->execute($fixtures, $this->getTypeOfFixtures($input));
     }
 
     /**
