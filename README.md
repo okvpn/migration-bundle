@@ -1,9 +1,10 @@
-OkvpnMigrationBundle
-==================
-
+# OkvpnMigrationBundle
 Database structure and data manipulator.
 
-![OkvpnMigrationBundle](./Resources/doc/okvpn-migration.png)
+[![Latest Stable Version](https://poser.pugx.org/okvpn/migration-bundle/version)](https://packagist.org/packages/okvpn/migration-bundle)
+[![Total Downloads](https://poser.pugx.org/okvpn/migration-bundle/downloads)](https://packagist.org/packages/okvpn/migration-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/okvpn/migration-bundle/v/unstable)](//packagist.org/packages/okvpn/migration-bundle)
+[![License](https://poser.pugx.org/okvpn/migration-bundle/license)](https://packagist.org/packages/okvpn/migration-bundle)
 
 Purpose
 -------
