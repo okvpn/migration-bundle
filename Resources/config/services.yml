@@ -10,6 +10,15 @@ services:
 
     okvpn_migration.migrations.loader:
         class: Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader
+
+    okvpn_migration.data_fixtures.executor:
+        class: Okvpn\Bundle\MigrationBundle\Migration\DataFixturesExecutor
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+
+    okvpn_migration.migrations.loader:
+        class: Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader
         arguments:
             - '@kernel'
             - '@doctrine.dbal.default_connection'
