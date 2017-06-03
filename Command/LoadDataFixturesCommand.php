@@ -2,20 +2,21 @@
 
 namespace Okvpn\Bundle\MigrationBundle\Command;
 
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
+use Okvpn\Bundle\MigrationBundle\Migration\DataFixturesExecutorInterface;
+
+
 class LoadDataFixturesCommand extends ContainerAwareCommand
 {
     const COMMAND_NAME = 'okvpn:migration:data:load';
 
-    const MAIN_FIXTURES_TYPE = 'main';
-    const DEMO_FIXTURES_TYPE = 'demo';
+    const MAIN_FIXTURES_TYPE = DataFixturesExecutorInterface::MAIN_FIXTURES;
+    const DEMO_FIXTURES_TYPE = DataFixturesExecutorInterface::DEMO_FIXTURES;
 
     const MAIN_FIXTURES_PATH = 'Migrations/Data/ORM';
     const DEMO_FIXTURES_PATH = 'Migrations/Data/Demo/ORM';
@@ -87,9 +88,9 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
      */
     protected function getFixtures(InputInterface $input, OutputInterface $output)
     {
-        $loader              = $this->getContainer()->get('okvpn_migration.data_fixtures.loader');
-        $bundles             = $input->getOption('bundles');
-        $excludeBundles      = $input->getOption('exclude');
+        $loader = $this->getContainer()->get('okvpn_migration.data_fixtures.loader');
+        $bundles = $input->getOption('bundles');
+        $excludeBundles = $input->getOption('exclude');
         $fixtureRelativePath = $this->getFixtureRelativePath($input);
 
         /** @var BundleInterface $bundle */
@@ -145,13 +146,13 @@ class LoadDataFixturesCommand extends ContainerAwareCommand
             )
         );
 
-        $executor = new ORMExecutor($this->getContainer()->get('doctrine.orm.entity_manager'));
+        $executor = $this->getContainer()->get('okvpn_migration.data_fixtures.executor');
         $executor->setLogger(
             function ($message) use ($output) {
                 $output->writeln(sprintf('  <comment>></comment> <info>%s</info>', $message));
             }
         );
-        $executor->execute($fixtures, true);
+        $executor->execute($fixtures, $this->getTypeOfFixtures($input));
     }
 
     /**
