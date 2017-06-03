@@ -1,14 +1,14 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Migration;
+namespace Okvpn\Bundle\MigrationBundle\Migration;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-use Oro\Bundle\MigrationBundle\Event\MigrationDataFixturesEvent;
-use Oro\Bundle\MigrationBundle\Event\MigrationEvents;
+use Okvpn\Bundle\MigrationBundle\Event\MigrationDataFixturesEvent;
+use Okvpn\Bundle\MigrationBundle\Event\MigrationEvents;
 
 /**
  * Executes ORM data fixtures.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Oro\Bundle\MigrationBundle\Event;
+namespace Okvpn\Bundle\MigrationBundle\Event;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\EventDispatcher\Event;
 
-use Oro\Bundle\MigrationBundle\Migration\DataFixturesExecutorInterface;
+use Okvpn\Bundle\MigrationBundle\Migration\DataFixturesExecutorInterface;
 
 class MigrationDataFixturesEvent extends Event
 {
