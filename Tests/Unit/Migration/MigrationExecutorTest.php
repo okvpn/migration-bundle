@@ -13,6 +13,7 @@ use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 use Okvpn\Bundle\MigrationBundle\Migration\SqlSchemaUpdateMigrationQuery;
 use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\IndexMigration;
 use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\Test1BundleInstallation;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration;
 
 class MigrationExecutorTest extends AbstractTestMigrationExecutor
 {
@@ -23,7 +24,7 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
     {
         parent::setUp();
 
-        $this->executor = new MigrationExecutor($this->queryExecutor, $this->cacheManager);
+        $this->executor = new MigrationExecutor($this->queryExecutor);
         $this->executor->setLogger($this->logger);
     }
 
@@ -32,8 +33,6 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
         $migrations = [
             new MigrationState(new IndexMigration()),
         ];
-        $this->cacheManager->expects($this->once())
-            ->method('clear');
 
         $this->executor->executeUp($migrations);
     }
@@ -43,7 +42,7 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
         $migrations = ['InvalidIndexMigration'];
         $migrationsToExecute = [];
         foreach ($migrations as $migration) {
-            $migrationClass = 'Oro\\Bundle\\MigrationBundle\\Tests\\Unit\\Fixture\\TestPackage\\' . $migration;
+            $migrationClass = 'Okvpn\\Bundle\\MigrationBundle\\Tests\\Unit\\Fixture\\TestPackage\\' . $migration;
             $migrationsToExecute[] = new MigrationState(new $migrationClass());
         }
 
@@ -51,8 +50,6 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
         $this->expectExceptionMessage(
             'Failed migrations: Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\InvalidIndexMigration.'
         );
-        $this->cacheManager->expects($this->never())
-            ->method('clear');
 
         $this->executor->executeUp($migrationsToExecute);
         $this->assertEquals(
@@ -72,17 +69,13 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
         $migrations = ['IndexMigration', 'UpdatedColumnIndexMigration'];
         $migrationsToExecute = [];
         foreach ($migrations as $migration) {
-            $migrationClass = 'Oro\\Bundle\\MigrationBundle\\Tests\\Unit\\Fixture\\TestPackage\\' . $migration;
+            $migrationClass = 'Okvpn\\Bundle\\MigrationBundle\\Tests\\Unit\\Fixture\\TestPackage\\' . $migration;
             $migrationsToExecute[] = new MigrationState(new $migrationClass());
         }
         $migrationsToExecute[] = new MigrationState(new Test1BundleInstallation());
 
         $this->expectException('\RuntimeException');
-        $this->expectExceptionMessage(
-            'Failed migrations: Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\UpdatedColumnIndexMigration.'
-        );
-        $this->cacheManager->expects($this->never())
-            ->method('clear');
+        $this->expectExceptionMessage(sprintf('Failed migrations: %s.', UpdatedColumnIndexMigration::class));
 
         $this->executor->executeUp($migrationsToExecute);
         $this->assertEquals(
@@ -139,11 +132,11 @@ class MigrationExecutorTest extends AbstractTestMigrationExecutor
                         'key',
                         Type::getType('string'),
                         [
-                            'length' => 255
+                            'length' => 255,
                         ]
-                    )
+                    ),
                 ]
-            )
+            ),
         ];
     }
 }

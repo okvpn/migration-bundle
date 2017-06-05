@@ -2,12 +2,10 @@
 
 namespace Okvpn\Bundle\MigrationBundle\Tests\Unit\Migration;
 
-use Okvpn\Bundle\MigrationBundle\Migration\MigrationState;
-use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\v1_0\Test1BundleMigration10;
-use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema\v1_1\Test1BundleMigration11;
-
 use Okvpn\Bundle\MigrationBundle\Migration\MigrationExecutorWithNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Migration\MigrationState;
 use Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\Test1Bundle\Migrations\Schema;
 use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongTableNameMigration;
 use Okvpn\Bundle\MigrationBundle\Tests\Unit\Fixture\TestPackage\WrongColumnNameMigration;
 
@@ -25,15 +23,15 @@ class MigrationExecutorWithNameGeneratorTest extends AbstractTestMigrationExecut
 
         $this->nameGenerator = new DbIdentifierNameGenerator();
 
-        $this->executor = new MigrationExecutorWithNameGenerator($this->queryExecutor, $this->cacheManager);
+        $this->executor = new MigrationExecutorWithNameGenerator($this->queryExecutor);
         $this->executor->setLogger($this->logger);
         $this->executor->setNameGenerator($this->nameGenerator);
     }
 
     public function testExecuteUp()
     {
-        $migration10 = new Test1BundleMigration10();
-        $migration11 = new Test1BundleMigration11();
+        $migration10 = new Schema\v1_0\Test1BundleMigration10();
+        $migration11 = new Schema\v1_1\Test1BundleMigration11();
         $migrations = [
             new MigrationState($migration10),
             new MigrationState($migration11)
@@ -69,8 +67,8 @@ class MigrationExecutorWithNameGeneratorTest extends AbstractTestMigrationExecut
 
     public function testExecuteUpWithDryRun()
     {
-        $migration10 = new Test1BundleMigration10();
-        $migration11 = new Test1BundleMigration11();
+        $migration10 = new Schema\v1_0\Test1BundleMigration10();
+        $migration11 = new Schema\v1_1\Test1BundleMigration11();
         $migrations = [
             new MigrationState($migration10),
             new MigrationState($migration11)
