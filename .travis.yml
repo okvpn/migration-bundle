@@ -1,0 +1,21 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - .autoconf
+    - $HOME/.composer
+
+branches:
+  only:
+    - master
+
+php:
+  - 7.0
+
+before_script:
+  - composer install
+
+script:
+  - php vendor/bin/phpunit --testsuite=unit
