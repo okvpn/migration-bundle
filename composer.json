@@ -24,7 +24,7 @@
         "phpunit/phpunit": "^5.7"
     },
     "autoload": {
-        "psr-4": { "Okvpn\\Bundle\\MigrationBundle\\": "" }
+        "psr-4": { "Okvpn\\Bundle\\MigrationBundle\\": "src" }
     },
     "extra": {
         "branch-alias": {
