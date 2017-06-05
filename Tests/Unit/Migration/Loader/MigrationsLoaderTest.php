@@ -108,7 +108,7 @@ class MigrationsLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function getMigrationsProvider()
     {
-        $testPackage = 'Oro\\Bundle\\MigrationBundle\\Tests\\Unit\\Fixture\\TestPackage\\';
+        $testPackage = 'Okvpn\\Bundle\\MigrationBundle\\Tests\\Unit\\Fixture\\TestPackage\\';
         $test1Bundle = $testPackage . 'Test1Bundle\\Migrations\\Schema';
         $test2Bundle = $testPackage . 'Test2Bundle\\Migrations\\Schema';
 

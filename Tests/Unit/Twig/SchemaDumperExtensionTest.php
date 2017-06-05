@@ -7,12 +7,9 @@ use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
 
 use Okvpn\Bundle\MigrationBundle\Twig\SchemaDumperExtension;
-use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
 class SchemaDumperExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    use TwigExtensionTestCaseTrait;
-
     /** @var SchemaDumperExtension */
     protected $extension;
 

@@ -30,7 +30,7 @@ class DataFixturesLoaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->em          = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
-        $this->em->expects($this->any())->method('getRepository')->with('OroMigrationBundle:DataFixture')
+        $this->em->expects($this->any())->method('getRepository')->with('OkvpnMigrationBundle:DataFixture')
             ->willReturn($this->fixtureRepo);
 
         $this->loader = new DataFixturesLoader($this->em, $this->container);
