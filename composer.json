@@ -18,13 +18,17 @@
     "require": {
         "php": ">=5.5.9",
         "symfony/framework-bundle": "~2.7|~3.0",
-        "doctrine/data-fixtures": "^1.0"
+        "symfony/doctrine-bridge": "~2.7|~3.0",
+        "symfony/twig-bundle": "~2.7|~3.0",
+        "doctrine/data-fixtures": "^1.0",
+        "doctrine/dbal": "^2.1",
+        "doctrine/orm": "^2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
     },
     "autoload": {
-        "psr-4": { "Okvpn\\Bundle\\MigrationBundle\\": "" }
+        "psr-4": { "Okvpn\\Bundle\\MigrationBundle\\": "src" }
     },
     "extra": {
         "branch-alias": {
