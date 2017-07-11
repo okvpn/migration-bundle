@@ -137,6 +137,43 @@ class MigrationsLoader
     }
 
     /**
+     * @return MigrationState[]
+     */
+    public function getPlainMigrations()
+    {
+        $result = [];
+
+        // process "pre" migrations
+        $preEvent = new PreMigrationEvent($this->connection);
+        $this->eventDispatcher->dispatch(MigrationEvents::PRE_UP, $preEvent);
+        $preMigrations = $preEvent->getMigrations();
+        foreach ($preMigrations as $migration) {
+            $result[] = new MigrationState($migration);
+        }
+        $this->loadedVersions = [];
+
+        // process main migrations
+        $migrationDirectories = $this->getMigrationDirectories();
+        $this->filterMigrations($migrationDirectories);
+        $this->createMigrationObjects(
+            $result,
+            $this->loadMigrationScripts($migrationDirectories)
+        );
+
+        $result[] = new MigrationState(new UpdateBundleVersionMigration($result));
+
+        // process "post" migrations
+        $postEvent = new PostMigrationEvent($this->connection);
+        $this->eventDispatcher->dispatch(MigrationEvents::POST_UP, $postEvent);
+        $postMigrations = $postEvent->getMigrations();
+        foreach ($postMigrations as $migration) {
+            $result[] = new MigrationState($migration);
+        }
+
+        return $result;
+    }
+
+    /**
      * Gets a list of all directories contain migration scripts
      *
      * @return array
