@@ -27,18 +27,18 @@ class {{ className }} implements Installation
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined %}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined %}
         $this->{{ 'create' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' }}($schema);
 {% endfor %}
 
         /** Foreign keys generation **/
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined %}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined %}
 {% if table.ForeignKeys is not empty %}
         $this->{{ 'add' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' }}($schema);
 {% endif %}
 {% endfor %}
     }
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined %}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined %}
 {% set methodName = 'create' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' %}
 
     /**
@@ -64,7 +64,7 @@ class {{ className }} implements Installation
 {% endfor %}
     }
 {% endfor %}
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined -%}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined -%}
 {% set methodName = 'add' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' %}
 {% if table.ForeignKeys is not empty %}
 
