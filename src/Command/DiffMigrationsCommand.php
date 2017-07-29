@@ -3,16 +3,15 @@
 namespace Okvpn\Bundle\MigrationBundle\Command;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Migrations\Provider\OrmSchemaProvider;
-use Doctrine\DBAL\Migrations\Provider\SchemaProviderInterface;
 use Doctrine\DBAL\Schema\Comparator;
-use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaDiff;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-use Okvpn\Bundle\MigrationBundle\Provider\OkvpnSchemaProvider;
+use Okvpn\Bundle\MigrationBundle\Provider\MigrationSchemaProvider;
+use Okvpn\Bundle\MigrationBundle\Provider\OrmSchemaProvider;
+use Okvpn\Bundle\MigrationBundle\Provider\SchemaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -48,7 +47,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     /** @var SchemaProviderInterface */
     protected $schemaProvider;
 
-    /** @var OkvpnSchemaProvider */
+    /** @var SchemaProviderInterface */
     protected $okvpnSchemaProvider;
 
     /**
@@ -89,7 +88,6 @@ class DiffMigrationsCommand extends ContainerAwareCommand
         $doctrine = $this->getContainer()->get('doctrine');
         $connection = $doctrine->getConnection();
 
-        $schema = $doctrine->getConnection()->getSchemaManager()->createSchema();
         $okvpnSchema = $this->getOkvpnSchemaProvider()->createSchema();
         $ormSchema = $this->getSchemaProvider()->createSchema();
         $schemaDiff = Comparator::compareSchemas($okvpnSchema, $ormSchema);
@@ -120,12 +118,12 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return OkvpnSchemaProvider|SchemaProviderInterface
+     * @return MigrationSchemaProvider|SchemaProviderInterface
      */
     protected function getOkvpnSchemaProvider()
     {
         if (!$this->okvpnSchemaProvider) {
-            $this->okvpnSchemaProvider = new OkvpnSchemaProvider(
+            $this->okvpnSchemaProvider = new MigrationSchemaProvider(
                 $this->getContainer()->get('okvpn_migration.migrations.loader')
             );
         }
@@ -180,7 +178,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param Schema $schema
+     * @param SchemaDiff $schema
      * @param OutputInterface $output
      */
     protected function dumpPhpSchema(SchemaDiff $schema, OutputInterface $output)
@@ -222,13 +220,5 @@ class DiffMigrationsCommand extends ContainerAwareCommand
                 unset($schemaDiff->changedTables[$k]);
             }
         }
-
-        //var_dump($schemaDiff->removedTables);
-        ///** @var Table $v */
-        //foreach ($schemaDiff->removedTables as $k => $v) {
-        //    if (in_array($v->getName(), $excludes) || !isset($this->allowedTables[$v->getName()])) {
-        //        unset($schemaDiff->removedTables[$k]);
-        //    }
-        //}
     }
 }
