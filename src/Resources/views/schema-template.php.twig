@@ -27,18 +27,18 @@ class {{ className }} implements Installation
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined %}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined %}
         $this->{{ 'create' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' }}($schema);
 {% endfor %}
 
         /** Foreign keys generation **/
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined %}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined %}
 {% if table.ForeignKeys is not empty %}
         $this->{{ 'add' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' }}($schema);
 {% endif %}
 {% endfor %}
     }
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined %}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined %}
 {% set methodName = 'create' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' %}
 
     /**
@@ -64,7 +64,7 @@ class {{ className }} implements Installation
 {% endfor %}
     }
 {% endfor %}
-{% for table in schema.tables if allowedTables is empty or allowedTables[table.name] is defined -%}
+{% for table in schema.tables if allowedTables is not empty and allowedTables[table.name] is defined -%}
 {% set methodName = 'add' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' %}
 {% if table.ForeignKeys is not empty %}
 
@@ -87,11 +87,11 @@ class {{ className }} implements Installation
     }
 {% endif -%}
 {% endfor -%}
-}{% spaceless %}
+}{%- spaceless %}
 
 {% macro dumpColumnOptions(column, columnExtendedOptions) %}
-    {% import _self as dmpr %}
-    {% spaceless %}
+    {%- import _self as dmpr %}
+    {%- spaceless %}
         {% set options = okvpn_migration_get_schema_column_options(column) %}
         {% set items = [] %}
         {% if options.default is defined %}{% set items = items|merge(["'default' => " ~ dmpr.dumpString(options.default)]) %}{% endif -%}
@@ -110,7 +110,7 @@ class {{ className }} implements Installation
 
 {% macro dumpOptionsArray(arrayValues) %}
     {% import _self as dmpr %}
-    {% spaceless %}
+    {%- spaceless %}
         {% set items = [] %}
         {% for valueName, value in arrayValues %}
             {% if value is null %}
@@ -130,13 +130,13 @@ class {{ className }} implements Installation
 {% endmacro %}
 
 {% macro dumpArray(arrayValues) %}
-    {% spaceless %}
+    {%- spaceless %}
         [{% for value in arrayValues %}{% if not loop.first %}, {% endif %}'{{ value }}'{% endfor %}]
     {% endspaceless %}
 {% endmacro %}
 
 {% macro dumpBoolean(value) %}
-    {% spaceless %}
+    {%- spaceless %}
         {% if value %}
             true
         {% else %}
@@ -146,7 +146,7 @@ class {{ className }} implements Installation
 {% endmacro %}
 
 {% macro dumpString(value) %}
-    {% spaceless %}
+    {%- spaceless %}
         {% if value is not null %}
             '{{ value }}'
         {% else %}
@@ -156,7 +156,7 @@ class {{ className }} implements Installation
 {% endmacro %}
 
 {% macro dumpInteger(value) %}
-    {% spaceless %}
+    {%- spaceless %}
         {% if value is not null %}
             {{ value }}
         {% else %}
