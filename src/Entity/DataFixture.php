@@ -5,6 +5,9 @@ namespace Okvpn\Bundle\MigrationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @deprecated since 1.2 and will be removed in 1.3. Fixtures package will be moved to another separate repository,
+ *             it step needed to reduces the count of not necessary dependencies
+ *
  * @ORM\Table("okvpn_migrations_data")
  * @ORM\Entity(repositoryClass="Okvpn\Bundle\MigrationBundle\Entity\Repository\DataFixtureRepository")
  */
