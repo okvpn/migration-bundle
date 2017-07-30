@@ -8,6 +8,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * @deprecated since 1.2 and will be removed in 1.3. Fixtures package will be moved to another separate repository,
+ *             it step needed to reduces the count of not necessary dependencies
+ */
 abstract class AbstractEntityReferenceFixture extends AbstractFixture implements FixtureInterface
 {
     /**

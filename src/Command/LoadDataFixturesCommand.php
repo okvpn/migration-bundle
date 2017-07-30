@@ -10,7 +10,10 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 use Okvpn\Bundle\MigrationBundle\Migration\DataFixturesExecutorInterface;
 
-
+/**
+ * @deprecated since 1.2 and will be removed in 1.3. Fixtures package will be moved to another separate repository,
+ *             it step needed to reduces the count of not necessary dependencies
+ */
 class LoadDataFixturesCommand extends ContainerAwareCommand
 {
     const COMMAND_NAME = 'okvpn:migration:data:load';
