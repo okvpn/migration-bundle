@@ -2,7 +2,7 @@
     "name": "okvpn/migration-bundle",
     "type": "symfony-bundle",
     "description": "Database Schema migrations using Doctrine",
-    "keywords": ["Migration", "Schema", "Data", "Fixtures"],
+    "keywords": ["Migration", "Schema"],
     "homepage": "https://github.com/okvpn/migration-bundle",
     "license": "MIT",
     "authors": [

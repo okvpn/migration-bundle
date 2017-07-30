@@ -11,6 +11,8 @@ use Doctrine\Common\DataFixtures\Exception\CircularReferenceException;
  * Issue solved is notices during fixtures sorting
  *
  * @TODO could be removed when https://github.com/doctrine/data-fixtures/issues/148 will be resolved
+ * @deprecated since 1.2 and will be removed in 1.3. Fixtures package will be moved to another separate repository,
+ *             it step needed to reduces the count of not necessary dependencies
  */
 class DataFixturesSorter
 {
