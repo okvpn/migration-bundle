@@ -1,0 +1,225 @@
+{% import _self as dmpr %}
+<?php
+
+namespace {{ namespace }}\Migrations\Schema\{{ version }};
+
+use Doctrine\DBAL\Schema\Schema;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+
+/**
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ */
+class {{ className }} implements Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getMigrationVersion()
+    {
+        return '{{ version }}';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function up(Schema $schema, QueryBag $queries)
+    {
+{% if schema.removedTables|length %}
+        /** Drop Tables **/
+{% for table in schema.removedTables %}
+        $schema->dropTable('{{ table.name }}');
+{% endfor %}
+{% endif %}
+{% if schema.newTables|length %}
+        /** New Tables generation **/
+{% for table in schema.newTables %}
+        $this->{{ 'create' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' }}($schema);
+{% endfor %}
+        /** Foreign keys generation **/
+{% for table in schema.newTables %}
+{% if table.ForeignKeys is not empty %}
+        $this->{{ 'add' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' }}($schema);
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if schema.changedTables|length %}
+        /** Update Tables generation **/
+{% for table in schema.changedTables %}
+        $this->{{ 'update' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' }}($schema);
+{% if table.addedForeignKeys is not empty or table.removedForeignKeys is not empty %}
+            // $this->{{ 'update' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' }}($schema);
+{% endif %}
+{% endfor %}
+{% endif %}
+    }
+{#Create Tables#}
+{% for table in schema.newTables %}
+{% set methodName = 'create' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' %}
+
+    /**
+     * Create {{ table.name }} table
+     *
+     * @param Schema $schema
+     */
+    protected function {{ methodName }}(Schema $schema)
+    {
+        $table = $schema->createTable('{{ table.name }}');
+{% for column in table.columns %}
+{% set columnExtendedOptions = extendedOptions[table.name][column.name] is defined ? extendedOptions[table.name][column.name] : null %}
+        $table->addColumn('{{ column.name }}', '{{ column.type.name }}', {{ dmpr.dumpColumnOptions(column, columnExtendedOptions) }});
+{% endfor %}
+{% for index in table.indexes %}
+{% if index.isPrimary %}
+        $table->setPrimaryKey({{ dmpr.dumpArray(index.columns) }});
+{% elseif index.isUnique %}
+        $table->addUniqueIndex({{ dmpr.dumpArray(index.columns) }}, '{{ index.name }}');
+{% else %}
+        $table->addIndex({{ dmpr.dumpArray(index.columns) }}, '{{ index.name }}', {{ dmpr.dumpArray(index.flags) }});
+{% endif %}
+{% endfor %}
+    }
+{% endfor %}
+{#Update Tables#}
+{% for table in schema.changedTables %}
+{% set methodName = 'update' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' %}
+
+    /**
+     * Update {{ table.name }} table
+     *
+     * @param Schema $schema
+     */
+    protected function {{ methodName }}(Schema $schema)
+    {
+        $table = $schema->get('{{ table.name }}');
+{% for column in table.removedColumns %}
+        $table->dropColumn('{{ column.getName() }}');
+{% endfor %}
+{% for column in table.changedColumns %}
+{% set changesOptions = {} %}
+{% for property in column.changedProperties %}
+{% set changesOptions = { (property): attribute(column.column, property) }|merge(changesOptions) %}
+{% endfor %}
+        $table->getColumn('{{ column.oldColumnName }}')->setOptions({{ dmpr.dumpOptionsArray(changesOptions) }});
+{% endfor %}
+
+{% for column in table.addedColumns %}
+{% set columnExtendedOptions = extendedOptions[table.name][column.name] is defined ? extendedOptions[table.name][column.name] : null %}
+        $table->addColumn('{{ column.name }}', '{{ column.type.name }}', {{ dmpr.dumpColumnOptions(column, columnExtendedOptions) }});
+{% endfor %}
+{% for index in table.addedIndexes %}
+{% if index.isPrimary %}
+        $table->setPrimaryKey({{ dmpr.dumpArray(index.columns) }});
+{% elseif index.isUnique %}
+        $table->addUniqueIndex({{ dmpr.dumpArray(index.columns) }}, '{{ index.name }}');
+{% else %}
+        $table->addIndex({{ dmpr.dumpArray(index.columns) }}, '{{ index.name }}', {{ dmpr.dumpArray(index.flags) }});
+{% endif %}
+{% endfor %}
+    }
+{% endfor %}
+
+{#Create FKeys#}
+{% for table in schema.newTables -%}
+{% set methodName = 'add' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' %}
+{% if table.ForeignKeys is not empty %}
+
+    /**
+     * Add {{ table.name }} foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function {{ methodName }}(Schema $schema)
+    {
+        $table = $schema->getTable('{{ table.name }}');
+{% for foreignKey in table.ForeignKeys %}
+        $table->addForeignKeyConstraint(
+            $schema->getTable('{{ foreignKey.foreignTableName }}'),
+            {{ dmpr.dumpArray(foreignKey.localColumns) }},
+            {{ dmpr.dumpArray(foreignKey.foreignColumns) }},
+            {{ dmpr.dumpOptionsArray(foreignKey.options) }}
+        );
+{% endfor %}
+    }
+{% endif -%}
+{% endfor -%}
+}{% spaceless %}
+
+{% macro dumpColumnOptions(column, columnExtendedOptions) %}
+    {%- import _self as dmpr %}
+    {%- spaceless %}
+        {% set options = okvpn_migration_get_schema_column_options(column) %}
+        {% set items = [] %}
+        {% if options.default is defined %}{% set items = items|merge(["'default' => " ~ dmpr.dumpString(options.default)]) %}{% endif -%}
+        {% if options.notnull is defined %}{% set items = items|merge(["'notnull' => " ~ dmpr.dumpBoolean(options.notnull)]) %}{% endif -%}
+        {% if options.length is defined %}{% set items = items|merge(["'length' => " ~ dmpr.dumpInteger(options.length)]) %}{% endif -%}
+        {% if options.precision is defined %}{% set items = items|merge(["'precision' => " ~ dmpr.dumpInteger(options.precision)]) %}{% endif -%}
+        {% if options.scale is defined %}{% set items = items|merge(["'scale' => " ~ dmpr.dumpInteger(options.scale)]) %}{% endif -%}
+        {% if options.fixed is defined %}{% set items = items|merge(["'fixed' => " ~ dmpr.dumpBoolean(options.fixed)]) %}{% endif -%}
+        {% if options.unsigned is defined %}{% set items = items|merge(["'unsigned' => " ~ dmpr.dumpBoolean(options.unsigned)]) %}{% endif -%}
+        {% if options.autoincrement is defined %}{% set items = items|merge(["'autoincrement' => " ~ dmpr.dumpBoolean(options.autoincrement)]) %}{% endif -%}
+        {% if options.comment is defined %}{% set items = items|merge(["'comment' => " ~ dmpr.dumpString(options.comment)]) %}{% endif -%}
+        {% if columnExtendedOptions is not empty %}{% set items = items|merge(["'oro_options' => " ~ dmpr.dumpOptionsArray(columnExtendedOptions)]) %}{% endif -%}
+        [{{ items|join(', ')|raw }}]
+    {% endspaceless %}
+{% endmacro %}
+
+{% macro dumpOptionsArray(arrayValues) %}
+    {%- import _self as dmpr %}
+    {%- spaceless %}
+        {% set items = [] %}
+        {% for valueName, value in arrayValues %}
+            {% if value is null %}
+                {% set items = items|merge(["'" ~ valueName ~ "' => null"]) %}
+            {% elseif value is same as(true) %}
+                {% set items = items|merge(["'" ~ valueName ~ "' => true"]) %}
+            {% elseif value is same as(false) %}
+                {% set items = items|merge(["'" ~ valueName ~ "' => false"]) %}
+            {% elseif value is iterable %}
+                {% set items = items|merge(["'" ~ valueName ~ "' => " ~ dmpr.dumpOptionsArray(value)]) %}
+            {% else %}
+                {% set items = items|merge(["'" ~ valueName ~ "' => '" ~ value ~ "'"]) %}
+            {% endif %}
+        {% endfor %}
+        [{{ items|join(', ')|raw }}]
+    {% endspaceless %}
+{% endmacro %}
+
+{% macro dumpArray(arrayValues) %}
+    {%- spaceless %}
+        [{% for value in arrayValues %}{% if not loop.first %}, {% endif %}'{{ value }}'{% endfor %}]
+    {% endspaceless %}
+{% endmacro %}
+
+{% macro dumpBoolean(value) %}
+    {%- spaceless %}
+        {% if value %}
+            true
+        {% else %}
+            false
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}
+
+{% macro dumpString(value) %}
+    {%- spaceless %}
+        {% if value is not null %}
+            '{{ value }}'
+        {% else %}
+            null
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}
+
+{% macro dumpInteger(value) %}
+    {%- spaceless %}
+        {% if value is not null %}
+            {{ value }}
+        {% else %}
+            null
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}
+{% endspaceless %}
