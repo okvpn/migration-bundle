@@ -28,31 +28,31 @@ class {{ className }} implements Migration
     {
 {% if schema.removedTables|length %}
         /** Drop Tables **/
-    {% for table in schema.removedTables %}
+{% for table in schema.removedTables %}
         $schema->dropTable('{{ table.name }}');
-    {% endfor %}
+{% endfor %}
 {% endif %}
 {% if schema.newTables|length %}
         /** New Tables generation **/
-    {% for table in schema.newTables %}
+{% for table in schema.newTables %}
         $this->{{ 'create' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' }}($schema);
-    {% endfor %}
+{% endfor %}
         /** Foreign keys generation **/
-    {% for table in schema.newTables %}
-        {% if table.ForeignKeys is not empty %}
+{% for table in schema.newTables %}
+{% if table.ForeignKeys is not empty %}
         $this->{{ 'add' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' }}($schema);
-        {% endif %}
-    {% endfor %}
+{% endif %}
+{% endfor %}
 {% endif %}
 
 {% if schema.changedTables|length %}
         /** Update Tables generation **/
-    {% for table in schema.changedTables %}
+{% for table in schema.changedTables %}
         $this->{{ 'update' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'Table' }}($schema);
-        {% if table.addedForeignKeys is not empty or table.removedForeignKeys is not empty %}
+{% if table.addedForeignKeys is not empty or table.removedForeignKeys is not empty %}
             // $this->{{ 'update' ~ table.name|replace({'_': ' '})|title|replace({' ': ''}) ~ 'ForeignKeys' }}($schema);
-        {% endif %}
-    {% endfor %}
+{% endif %}
+{% endfor %}
 {% endif %}
     }
 {#Create Tables#}
@@ -98,10 +98,11 @@ class {{ className }} implements Migration
         $table->dropColumn('{{ column.getName() }}');
 {% endfor %}
 {% for column in table.changedColumns %}
-        $column = $table->getColumn('{{ column.oldColumnName }}');
-    {#{% for property in column.changedProperties %}#}
-        {#{{ property }}#}
-    {#{% endfor %}#}
+{% set changesOptions = {} %}
+{% for property in column.changedProperties %}
+{% set changesOptions = { (property): attribute(column.column, property) }|merge(changesOptions) %}
+{% endfor %}
+        $table->getColumn('{{ column.oldColumnName }}')->setOptions({{ dmpr.dumpOptionsArray(changesOptions) }});
 {% endfor %}
 
 {% for column in table.addedColumns %}
@@ -147,8 +148,8 @@ class {{ className }} implements Migration
 }{% spaceless %}
 
 {% macro dumpColumnOptions(column, columnExtendedOptions) %}
-    {% import _self as dmpr %}
-    {% spaceless %}
+    {%- import _self as dmpr %}
+    {%- spaceless %}
         {% set options = okvpn_migration_get_schema_column_options(column) %}
         {% set items = [] %}
         {% if options.default is defined %}{% set items = items|merge(["'default' => " ~ dmpr.dumpString(options.default)]) %}{% endif -%}
@@ -166,8 +167,8 @@ class {{ className }} implements Migration
 {% endmacro %}
 
 {% macro dumpOptionsArray(arrayValues) %}
-    {% import _self as dmpr %}
-    {% spaceless %}
+    {%- import _self as dmpr %}
+    {%- spaceless %}
         {% set items = [] %}
         {% for valueName, value in arrayValues %}
             {% if value is null %}
@@ -187,13 +188,13 @@ class {{ className }} implements Migration
 {% endmacro %}
 
 {% macro dumpArray(arrayValues) %}
-    {% spaceless %}
+    {%- spaceless %}
         [{% for value in arrayValues %}{% if not loop.first %}, {% endif %}'{{ value }}'{% endfor %}]
     {% endspaceless %}
 {% endmacro %}
 
 {% macro dumpBoolean(value) %}
-    {% spaceless %}
+    {%- spaceless %}
         {% if value %}
             true
         {% else %}
@@ -203,7 +204,7 @@ class {{ className }} implements Migration
 {% endmacro %}
 
 {% macro dumpString(value) %}
-    {% spaceless %}
+    {%- spaceless %}
         {% if value is not null %}
             '{{ value }}'
         {% else %}
@@ -213,7 +214,7 @@ class {{ className }} implements Migration
 {% endmacro %}
 
 {% macro dumpInteger(value) %}
-    {% spaceless %}
+    {%- spaceless %}
         {% if value is not null %}
             {{ value }}
         {% else %}
