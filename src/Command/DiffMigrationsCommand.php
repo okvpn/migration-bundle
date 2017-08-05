@@ -70,7 +70,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
                 'Migration version',
                 'v1_0'
             )
-            ->setDescription('Diff');
+            ->setDescription('Compare current existing database structure with orm structure');
     }
 
     /**
