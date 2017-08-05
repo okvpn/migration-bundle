@@ -13,7 +13,7 @@ use Okvpn\Bundle\MigrationBundle\Event\MigrationEvents;
 /**
  * Executes ORM data fixtures.
  *
- * @deprecated since 1.2 and will be removed in 1.3. Fixtures package will be moved to another separate repository,
+ * @deprecated since 1.2 and will be removed in 2.0. Fixtures package will be moved to another separate repository,
  *             it step needed to reduces the count of not necessary dependencies
  */
 class DataFixturesExecutor implements DataFixturesExecutorInterface
