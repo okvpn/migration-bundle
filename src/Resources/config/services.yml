@@ -2,18 +2,6 @@ services:
     okvpn_migration.db_id_name_generator:
         class: Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator
 
-    okvpn_migration.data_fixtures.loader:
-        class: Okvpn\Bundle\MigrationBundle\Migration\Loader\DataFixturesLoader
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@service_container'
-
-    okvpn_migration.data_fixtures.executor:
-        class: Okvpn\Bundle\MigrationBundle\Migration\DataFixturesExecutor
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@event_dispatcher'
-
     okvpn_migration.migrations.loader:
         class: Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader
         arguments:
