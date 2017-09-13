@@ -46,6 +46,11 @@ services:
         arguments:
             - '@twig'
 
+    okvpn_migration.tools.schema_diff_dumper:
+        class: Okvpn\Bundle\MigrationBundle\Tools\SchemaDiffDumper
+        arguments:
+            - '@twig'
+
     okvpn_migration.twig.schema_dumper:
         class: Okvpn\Bundle\MigrationBundle\Twig\SchemaDumperExtension
         public: false
