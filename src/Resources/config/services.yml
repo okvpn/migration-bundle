@@ -43,6 +43,7 @@ services:
 
     okvpn_migration.tools.schema_dumper:
         class: Okvpn\Bundle\MigrationBundle\Tools\SchemaDumper
+        public: true
         arguments:
             - '@twig'
 
