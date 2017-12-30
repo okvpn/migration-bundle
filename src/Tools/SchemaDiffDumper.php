@@ -6,7 +6,7 @@ use Doctrine\DBAL\Schema\SchemaDiff;
 
 class SchemaDiffDumper
 {
-    const SCHEMA_TEMPLATE = 'OkvpnMigrationBundle::schema-diff-template.php.twig';
+    const SCHEMA_TEMPLATE = '@OkvpnMigration/schema-diff-template.php.twig';
     const DEFAULT_CLASS_NAME = 'AllMigration';
     const DEFAULT_VERSION = 'v1_0';
 
