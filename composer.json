@@ -2,14 +2,10 @@
     "name": "okvpn/migration-bundle",
     "type": "symfony-bundle",
     "description": "Database Schema migrations using Doctrine",
-    "keywords": ["Migration", "Schema"],
+    "keywords": ["Migration", "Schema", "Symfony Migration"],
     "homepage": "https://github.com/okvpn/migration-bundle",
     "license": "MIT",
     "authors": [
-        {
-            "name": "Oro, Inc",
-            "homepage": "http://www.orocrm.com"
-        },
         {
             "name": "Tsykun Vladimir",
             "email": "vtsykun@okvpn.org"
@@ -17,9 +13,9 @@
     ],
     "require": {
         "php": ">=7.0",
-        "symfony/framework-bundle": "~2.7|~3.0",
-        "symfony/doctrine-bridge": "~2.7|~3.0",
-        "symfony/twig-bundle": "~2.7|~3.0",
+        "symfony/framework-bundle": "~2.7|~3.0|~4.0",
+        "symfony/doctrine-bridge": "~2.7|~3.0|~4.0",
+        "symfony/twig-bundle": "~2.7|~3.0|~4.0",
         "doctrine/dbal": "^2.1",
         "doctrine/orm": "^2.1"
     },

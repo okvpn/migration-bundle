@@ -1,22 +1,32 @@
+parameters:
+    okvpn.migrations_table: 'okvpn_migrations'
+    okvpn.migrations_path: 'Migrations/Schema'
+
 services:
     okvpn_migration.db_id_name_generator:
         class: Okvpn\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator
+        public: false
 
     okvpn_migration.migrations.loader:
         class: Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader
+        public: true
         arguments:
             - '@kernel'
             - '@doctrine.dbal.default_connection'
             - '@service_container'
             - '@event_dispatcher'
+            - '%okvpn.migrations_path%'
+            - '%okvpn.migrations_table%'
 
     okvpn_migration.migrations.query_executor:
         class: Okvpn\Bundle\MigrationBundle\Migration\MigrationQueryExecutor
+        public: false
         arguments:
             - '@doctrine.dbal.default_connection'
 
     okvpn_migration.migrations.executor:
         class: Okvpn\Bundle\MigrationBundle\Migration\MigrationExecutorWithNameGenerator
+        public: true
         arguments:
             - '@okvpn_migration.migrations.query_executor'
         calls:
@@ -25,6 +35,7 @@ services:
 
     okvpn_migration.migration.pre_up.listener:
         class: Okvpn\Bundle\MigrationBundle\EventListener\PreUpMigrationListener
+        arguments: ['%okvpn.migrations_table%']
         tags:
             - { name: kernel.event_listener, event: okvpn_migration.pre_up, method: onPreUp }
 
@@ -33,11 +44,13 @@ services:
 
     okvpn_migration.migration.extension.rename:
         class: Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtension
+        public: false
         tags:
             - { name: okvpn_migration.extension, extension_name: rename }
 
     okvpn_migration.migration.extension.data_storage:
         class: Okvpn\Bundle\MigrationBundle\Migration\Extension\DataStorageExtension
+        public: false
         tags:
             - { name: okvpn_migration.extension, extension_name: data_store }
 
@@ -46,11 +59,14 @@ services:
         public: true
         arguments:
             - '@twig'
+            - '%okvpn.migrations_path%'
 
     okvpn_migration.tools.schema_diff_dumper:
         class: Okvpn\Bundle\MigrationBundle\Tools\SchemaDiffDumper
+        public: true
         arguments:
             - '@twig'
+            - '%okvpn.migrations_path%'
 
     okvpn_migration.twig.schema_dumper:
         class: Okvpn\Bundle\MigrationBundle\Twig\SchemaDumperExtension
@@ -59,3 +75,9 @@ services:
             - '@doctrine'
         tags:
             - { name: twig.extension }
+
+    okvpn_migration.listener.doctrine_metadata:
+        class: Okvpn\Bundle\MigrationBundle\EventListener\DoctrineMetadataListener
+        arguments: ['%okvpn.migrations_table%']
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata }

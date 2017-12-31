@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Okvpn\Bundle\MigrationBundle\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
@@ -9,12 +11,17 @@ class UpdateBundleVersionMigration implements Migration, FailIndependentMigratio
     /** @var MigrationState[] */
     protected $migrations;
 
+    /** @var string */
+    protected $migrationTable;
+
     /**
      * @param MigrationState[] $migrations
+     * @param string $migrationTable
      */
-    public function __construct(array $migrations)
+    public function __construct(array $migrations, string $migrationTable = null)
     {
         $this->migrations = $migrations;
+        $this->migrationTable = $migrationTable ? $migrationTable : CreateMigrationTableMigration::MIGRATION_TABLE;
     }
 
     /**
@@ -28,7 +35,7 @@ class UpdateBundleVersionMigration implements Migration, FailIndependentMigratio
             foreach ($bundleVersions as $bundleName => $bundleVersion) {
                 $sql = sprintf(
                     "INSERT INTO %s (bundle, version, loaded_at) VALUES ('%s', '%s', '%s')",
-                    CreateMigrationTableMigration::MIGRATION_TABLE,
+                    $this->migrationTable,
                     $bundleName,
                     $bundleVersion,
                     $date->format('Y-m-d H:i:s')

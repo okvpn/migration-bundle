@@ -26,7 +26,7 @@ class SchemaDumperTest extends \PHPUnit_Framework_TestCase
     {
         $this->twig = $this->getMockBuilder('\Twig_Environment')->disableOriginalConstructor()->getMock();
         $this->schema = new Schema();
-        $this->schemaDumper = new SchemaDumper($this->twig);
+        $this->schemaDumper = new SchemaDumper($this->twig, 'Migrations/Schema');
 
         $this->schemaDumper->acceptSchema($this->schema);
     }
@@ -58,7 +58,8 @@ class SchemaDumperTest extends \PHPUnit_Framework_TestCase
                     'namespace' => $expectedNamespace,
                     'className' => $className,
                     'version' => $version,
-                    'extendedOptions' => $extendedOptions
+                    'extendedOptions' => $extendedOptions,
+                    'migrationPath' => 'Migrations\Schema'
                 ]
             )
             ->will($this->returnValue('TEST'));

@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-use Okvpn\Bundle\MigrationBundle\Migration\Migration;
 use Okvpn\Bundle\MigrationBundle\Migration\MigrationState;
 use Okvpn\Bundle\MigrationBundle\Migration\Installation;
 use Okvpn\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
@@ -25,8 +24,6 @@ use Okvpn\Bundle\MigrationBundle\Event\PreMigrationEvent;
  */
 class MigrationsLoader
 {
-    const MIGRATIONS_PATH = 'Migrations/Schema';
-
     /**
      * @var KernelInterface
      *
@@ -66,27 +63,43 @@ class MigrationsLoader
     protected $excludeBundles;
 
     /**
+     * @var string Path that located migration files
+     */
+    protected $migrationPath;
+
+    /**
+     * @var string Migration table
+     */
+    protected $migrationTable;
+
+    /**
      * @param KernelInterface          $kernel
      * @param Connection               $connection
      * @param ContainerInterface       $container
      * @param EventDispatcherInterface $eventDispatcher
+     * @param string                   $migrationPath
+     * @param string                   $migrationTable
      */
     public function __construct(
         KernelInterface $kernel,
         Connection $connection,
         ContainerInterface $container,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        string $migrationPath,
+        string $migrationTable
     ) {
         $this->kernel          = $kernel;
         $this->connection      = $connection;
         $this->container       = $container;
         $this->eventDispatcher = $eventDispatcher;
+        $this->migrationTable  = $migrationTable;
+        $this->migrationPath   = $migrationPath;
     }
 
     /**
      * @param array $bundles
      */
-    public function setBundles($bundles)
+    public function setBundles(array $bundles)
     {
         $this->bundles = $bundles;
     }
@@ -94,7 +107,7 @@ class MigrationsLoader
     /**
      * @param array $excludeBundles
      */
-    public function setExcludeBundles($excludeBundles)
+    public function setExcludeBundles(array $excludeBundles)
     {
         $this->excludeBundles = $excludeBundles;
     }
@@ -102,7 +115,7 @@ class MigrationsLoader
     /**
      * @return MigrationState[]
      */
-    public function getMigrations()
+    public function getMigrations(): array
     {
         $result = [];
 
@@ -123,7 +136,7 @@ class MigrationsLoader
             $this->loadMigrationScripts($migrationDirectories)
         );
 
-        $result[] = new MigrationState(new UpdateBundleVersionMigration($result));
+        $result[] = new MigrationState(new UpdateBundleVersionMigration($result, $this->migrationTable));
 
         // process "post" migrations
         $postEvent = new PostMigrationEvent($this->connection);
@@ -139,7 +152,7 @@ class MigrationsLoader
     /**
      * @return MigrationState[]
      */
-    public function getPlainMigrations()
+    public function getPlainMigrations(): array
     {
         $result = [];
 
@@ -160,7 +173,7 @@ class MigrationsLoader
             $this->loadMigrationScripts($migrationDirectories)
         );
 
-        $result[] = new MigrationState(new UpdateBundleVersionMigration($result));
+        $result[] = new MigrationState(new UpdateBundleVersionMigration($result, $this->migrationTable));
 
         // process "post" migrations
         $postEvent = new PostMigrationEvent($this->connection);
@@ -193,7 +206,7 @@ class MigrationsLoader
             $bundleMigrationPath = str_replace(
                 '/',
                 DIRECTORY_SEPARATOR,
-                $bundlePath . '/' . self::MIGRATIONS_PATH
+                $bundlePath . '/' . $this->migrationPath
             );
 
             if (is_dir($bundleMigrationPath)) {
@@ -430,6 +443,7 @@ class MigrationsLoader
                 }
             } elseif (isset($files['installers'][$sourceFile])) {
                 if (is_subclass_of($className, 'Okvpn\Bundle\MigrationBundle\Migration\Installation')) {
+                    /** @var \Okvpn\Bundle\MigrationBundle\Migration\Installation $installer */
                     $installer = new $className;
                     if (isset($migrations[$sourceFile])) {
                         throw new \RuntimeException('An installation  script must contains only one class.');

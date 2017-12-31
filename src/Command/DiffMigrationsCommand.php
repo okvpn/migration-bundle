@@ -79,7 +79,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('bundle')) {
-            throw new \Exception('Wrong bundle');
+            throw new \InvalidArgumentException('The "bundle" option can not be empty');
         }
 
         $this->version = $input->getOption('migration-version');

@@ -47,7 +47,9 @@ class MigrationsLoaderTest extends \PHPUnit_Framework_TestCase
             $this->kernel,
             $this->connection,
             $this->container,
-            $this->eventDispatcher
+            $this->eventDispatcher,
+            'Migrations/Schema',
+            'okvpn_migrations'
         );
     }
 
