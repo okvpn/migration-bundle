@@ -93,7 +93,7 @@ class {{ className }} implements Migration
      */
     protected function {{ methodName }}(Schema $schema)
     {
-        $table = $schema->get('{{ table.name }}');
+        $table = $schema->getTable('{{ table.name }}');
 {% for column in table.removedColumns %}
         $table->dropColumn('{{ column.getName() }}');
 {% endfor %}
