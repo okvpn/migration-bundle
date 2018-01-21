@@ -209,6 +209,8 @@ class MigrationsLoader
                 $bundlePath . '/' . $this->migrationPath
             );
 
+            $bundleMigrationPath = rtrim($bundleMigrationPath, DIRECTORY_SEPARATOR);
+
             if (is_dir($bundleMigrationPath)) {
                 $bundleMigrationDirectories = [];
 

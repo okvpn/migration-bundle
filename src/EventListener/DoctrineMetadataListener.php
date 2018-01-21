@@ -12,6 +12,7 @@ class DoctrineMetadataListener
 {
     const DEFAULT_TABLE = 'okvpn_fixture_data';
 
+    /** @var string */
     private $migrationTable;
 
     /**
@@ -32,6 +33,16 @@ class DoctrineMetadataListener
         if ($metadata->getName() === DataMigration::class) {
             $table = $metadata->table;
             $table['name'] = $this->migrationTable;
+            $table['indexes'] = [
+                'idx_' . $this->migrationTable =>
+                    [
+                        'columns' =>
+                            [
+                                0 => 'bundle',
+                            ],
+                    ],
+            ];
+
             $metadata->setPrimaryTable($table);
         }
     }
