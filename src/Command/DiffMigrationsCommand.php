@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 class DiffMigrationsCommand extends ContainerAwareCommand
 {
@@ -32,6 +33,11 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     /**
      * @var string
      */
+    protected $migrationPath;
+
+    /**
+     * @var string
+     */
     protected $namespace;
 
     /**
@@ -44,10 +50,14 @@ class DiffMigrationsCommand extends ContainerAwareCommand
      */
     protected $version;
 
-    /** @var SchemaProviderInterface */
+    /**
+     * @var SchemaProviderInterface
+     */
     protected $schemaProvider;
 
-    /** @var SchemaProviderInterface */
+    /**
+     * @var SchemaProviderInterface
+     */
     protected $okvpnSchemaProvider;
 
     /**
@@ -71,6 +81,29 @@ class DiffMigrationsCommand extends ContainerAwareCommand
                 'v1_0'
             )
             ->setDescription('Compare current existing database structure with orm structure');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        if (!$input->getOption('bundle')) {
+            $helper = $this->getHelper('question');
+            $question = new Question("<info>Please select your package name:</info>\n > ");
+            $bundleNames = array_keys($this->getContainer()->get('okvpn_migration.migrations.loader')->getBundleList());
+            $question->setAutocompleterValues($bundleNames);
+            $question->setValidator(function ($answer) use ($bundleNames) {
+                if (!in_array($answer, $bundleNames)) {
+                    throw new \RuntimeException(sprintf('Package "%s" does not exist.', $answer));
+                }
+                return $answer;
+            });
+
+            $question->setMaxAttempts(3);
+            $bundle = $helper->ask($input, $output, $question);
+            $input->setOption('bundle', $bundle);
+        }
     }
 
     /**
@@ -137,14 +170,16 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     protected function initializeBundleRestrictions($bundle)
     {
         if ($bundle) {
-            $bundles = $this->getContainer()->getParameter('kernel.bundles');
+            $bundles = $this->getContainer()->get('okvpn_migration.migrations.loader')->getBundleList();
             if (!array_key_exists($bundle, $bundles)) {
                 throw new \InvalidArgumentException(
                     sprintf('Bundle "%s" is not a known bundle', $bundle)
                 );
             }
-            $this->namespace = str_replace($bundle, 'Entity', $bundles[$bundle]);
+
+            $this->migrationPath = $bundles[$bundle]['dir_name'];
             $this->className = $bundle . 'Installer';
+            $this->namespace = $bundles[$bundle]['namespace'];
         }
     }
 
@@ -159,8 +194,8 @@ class DiffMigrationsCommand extends ContainerAwareCommand
         array_walk(
             $allMetadata,
             function (ClassMetadata $entityMetadata) {
-                if ($this->namespace) {
-                    if ($entityMetadata->namespace == $this->namespace) {
+                if ($this->migrationPath) {
+                    if (strpos($entityMetadata->getReflectionClass()->getFileName(), $this->migrationPath) === 0) {
                         $this->allowedTables[$entityMetadata->getTableName()] = true;
                         foreach ($entityMetadata->getAssociationMappings() as $associationMappingInfo) {
                             if (!empty($associationMappingInfo['joinTable'])) {
@@ -168,10 +203,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
                                 $this->allowedTables[$joinTableName] = true;
                             }
                         }
-                        //$this->initializeExtendedFieldsOptions($entityMetadata);
                     }
-                } else {
-                    //$this->initializeExtendedFieldsOptions($entityMetadata);
                 }
             }
         );

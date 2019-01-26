@@ -17,6 +17,13 @@ services:
             - '@event_dispatcher'
             - '%okvpn.migrations_path%'
             - '%okvpn.migrations_table%'
+            - []
+
+    okvpn_migration.listener.schema_listener:
+        class: Okvpn\Bundle\MigrationBundle\EventListener\DoctrineSchemaChangeListener
+        arguments: ['%okvpn.migrations_table%']
+        tags:
+            - { name: doctrine.event_listener, event: onSchemaAlterTableChangeColumn }
 
     okvpn_migration.migrations.query_executor:
         class: Okvpn\Bundle\MigrationBundle\Migration\MigrationQueryExecutor
@@ -81,3 +88,18 @@ services:
         arguments: ['%okvpn.migrations_table%']
         tags:
             - { name: doctrine.event_listener, event: loadClassMetadata }
+
+    okvpn_migration.command.diff_migrations:
+        class: Okvpn\Bundle\MigrationBundle\Command\DiffMigrationsCommand
+        tags:
+            - { name: console.command }
+
+    okvpn_migration.command.dump_migrations:
+        class: Okvpn\Bundle\MigrationBundle\Command\DumpMigrationsCommand
+        tags:
+            - { name: console.command }
+
+    okvpn_migration.command.load_migrations:
+        class: Okvpn\Bundle\MigrationBundle\Command\LoadMigrationsCommand
+        tags:
+            - { name: console.command }

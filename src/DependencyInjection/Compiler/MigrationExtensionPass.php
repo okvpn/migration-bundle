@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Okvpn\Bundle\MigrationBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -7,7 +9,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class MigrationExtensionPass implements CompilerPassInterface
+final class MigrationExtensionPass implements CompilerPassInterface
 {
     const MANAGER_SERVICE_KEY = 'okvpn_migration.migrations.extension_manager';
     const TAG                 = 'okvpn_migration.extension';

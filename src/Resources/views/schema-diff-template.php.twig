@@ -44,7 +44,6 @@ class {{ className }} implements Migration
 {% endif %}
 {% endfor %}
 {% endif %}
-
 {% if schema.changedTables|length %}
         /** Update Tables generation **/
 {% for table in schema.changedTables %}
@@ -155,7 +154,7 @@ class {{ className }} implements Migration
         {% if options.default is defined %}{% set items = items|merge(["'default' => " ~ dmpr.dumpString(options.default)]) %}{% endif -%}
         {% if options.notnull is defined %}{% set items = items|merge(["'notnull' => " ~ dmpr.dumpBoolean(options.notnull)]) %}{% endif -%}
         {% if options.length is defined %}{% set items = items|merge(["'length' => " ~ dmpr.dumpInteger(options.length)]) %}{% endif -%}
-        {% if options.precision is defined %}{% set items = items|merge(["'precision' => " ~ dmpr.dumpInteger(options.precision)]) %}{% endif -%}
+        {% if options.precision is defined and options.precision %}{% set items = items|merge(["'precision' => " ~ dmpr.dumpInteger(options.precision)]) %}{% endif -%}
         {% if options.scale is defined %}{% set items = items|merge(["'scale' => " ~ dmpr.dumpInteger(options.scale)]) %}{% endif -%}
         {% if options.fixed is defined %}{% set items = items|merge(["'fixed' => " ~ dmpr.dumpBoolean(options.fixed)]) %}{% endif -%}
         {% if options.unsigned is defined %}{% set items = items|merge(["'unsigned' => " ~ dmpr.dumpBoolean(options.unsigned)]) %}{% endif -%}

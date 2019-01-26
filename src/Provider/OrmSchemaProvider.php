@@ -4,6 +4,7 @@ namespace Okvpn\Bundle\MigrationBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**
@@ -38,6 +39,21 @@ final class OrmSchemaProvider implements SchemaProviderInterface
         }
 
         $tool = new SchemaTool($this->entityManager);
+
+        /** @var ClassMetadata $classMetadata */
+        foreach ($metadata as $classMetadata) {
+            if (!$classMetadata->isIdGeneratorSequence()) {
+                continue;
+            }
+
+            $sequenceGeneratorDefinition = $classMetadata->sequenceGeneratorDefinition;
+            if (empty($sequenceGeneratorDefinition)) {
+                continue;
+            }
+
+            // Set autoincrement true
+            $classMetadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_IDENTITY);
+        }
 
         return $tool->getSchemaFromMetadata($metadata);
     }

@@ -7,7 +7,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -73,12 +72,18 @@ class MigrationsLoader
     protected $migrationTable;
 
     /**
+     * @var array
+     */
+    protected $includedBundles;
+
+    /**
      * @param KernelInterface          $kernel
      * @param Connection               $connection
      * @param ContainerInterface       $container
      * @param EventDispatcherInterface $eventDispatcher
      * @param string                   $migrationPath
      * @param string                   $migrationTable
+     * @param array                    $includedBundles
      */
     public function __construct(
         KernelInterface $kernel,
@@ -86,7 +91,8 @@ class MigrationsLoader
         ContainerInterface $container,
         EventDispatcherInterface $eventDispatcher,
         string $migrationPath,
-        string $migrationTable
+        string $migrationTable,
+        array $includedBundles = []
     ) {
         $this->kernel          = $kernel;
         $this->connection      = $connection;
@@ -94,6 +100,7 @@ class MigrationsLoader
         $this->eventDispatcher = $eventDispatcher;
         $this->migrationTable  = $migrationTable;
         $this->migrationPath   = $migrationPath;
+        $this->includedBundles = $includedBundles;
     }
 
     /**
@@ -187,6 +194,47 @@ class MigrationsLoader
     }
 
     /**
+     * Return list of bundles with migration path.
+     *
+     * @param string $migrationPrefix
+     *
+     * @return array bundle name = [dir_name, namespace]
+     */
+    public function getBundleList(string $migrationPrefix = ''): array
+    {
+        $bundles = $this->includedBundles;
+
+        if (!empty($this->bundles)) {
+            $includedBundles = [];
+            foreach ($this->bundles as $bundleName) {
+                if (isset($bundles[$bundleName])) {
+                    $includedBundles[$bundleName] = $bundles[$bundleName];
+                }
+            }
+            $bundles = $includedBundles;
+        }
+
+        if (!empty($this->excludeBundles)) {
+            foreach ($this->excludeBundles as $excludeBundle) {
+                unset($bundles[$excludeBundle]);
+            }
+        }
+
+        foreach ($bundles as $name => $config) {
+            $bundlePath = $config['dir_name'];
+            $bundleMigrationPath = str_replace(
+                '/',
+                DIRECTORY_SEPARATOR,
+                preg_replace('#(\/+|\\+)#', '/', $bundlePath . '/' . $migrationPrefix)
+            );
+
+            $bundles[$name]['dir_name'] = rtrim($bundleMigrationPath, DIRECTORY_SEPARATOR);
+        }
+
+        return $bundles;
+    }
+
+    /**
      * Gets a list of all directories contain migration scripts
      *
      * @return array
@@ -196,20 +244,13 @@ class MigrationsLoader
      *      .            or empty string for root migration directory
      *      .    value = full path to a migration directory
      */
-    protected function getMigrationDirectories()
+    protected function getMigrationDirectories(): array
     {
         $result = [];
 
-        $bundles = $this->getBundleList();
-        foreach ($bundles as $bundleName => $bundle) {
-            $bundlePath          = $bundle->getPath();
-            $bundleMigrationPath = str_replace(
-                '/',
-                DIRECTORY_SEPARATOR,
-                $bundlePath . '/' . $this->migrationPath
-            );
-
-            $bundleMigrationPath = rtrim($bundleMigrationPath, DIRECTORY_SEPARATOR);
+        $migrations = $this->getBundleList($this->migrationPath);
+        foreach ($migrations as $name => $configuration) {
+            $bundleMigrationPath = $configuration['dir_name'];
 
             if (is_dir($bundleMigrationPath)) {
                 $bundleMigrationDirectories = [];
@@ -233,7 +274,7 @@ class MigrationsLoader
                     );
                 }
 
-                $result[$bundleName] = $bundleMigrationDirectories;
+                $result[$name] = $bundleMigrationDirectories;
             }
         }
 
@@ -494,29 +535,5 @@ class MigrationsLoader
                 }
             }
         }
-    }
-
-    /**
-     * @return BundleInterface[] key = bundle name
-     */
-    protected function getBundleList()
-    {
-        $bundles = $this->kernel->getBundles();
-        if (!empty($this->bundles)) {
-            $includedBundles = [];
-            foreach ($this->bundles as $bundleName) {
-                if (isset($bundles[$bundleName])) {
-                    $includedBundles[$bundleName] = $bundles[$bundleName];
-                }
-            }
-            $bundles = $includedBundles;
-        }
-        if (!empty($this->excludeBundles)) {
-            foreach ($this->excludeBundles as $excludeBundle) {
-                unset($bundles[$excludeBundle]);
-            }
-        }
-
-        return $bundles;
     }
 }
