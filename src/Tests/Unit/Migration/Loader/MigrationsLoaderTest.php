@@ -12,9 +12,6 @@ use Okvpn\Bundle\MigrationBundle\Migration\Loader\MigrationsLoader;
 
 class MigrationsLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var MigrationsLoader */
-    protected $loader;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $kernel;
 
@@ -42,15 +39,6 @@ class MigrationsLoaderTest extends \PHPUnit_Framework_TestCase
         $this->connection = $this->getMockBuilder('Doctrine\DBAL\Connection')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->loader = new MigrationsLoader(
-            $this->kernel,
-            $this->connection,
-            $this->container,
-            $this->eventDispatcher,
-            'Migrations/Schema',
-            'okvpn_migrations'
-        );
     }
 
     /**
@@ -59,14 +47,24 @@ class MigrationsLoaderTest extends \PHPUnit_Framework_TestCase
     public function testGetMigrations($bundles, $installed, $expectedMigrationClasses)
     {
         $bundlesList = [];
+
         /** @var \Symfony\Component\HttpKernel\Bundle\Bundle $bundle */
         foreach ($bundles as $bundle) {
-            $bundlesList[$bundle->getName()] = $bundle;
+            $bundlesList[$bundle->getName()] = [
+                'dir_name' => $bundle->getPath(),
+                'namespace' => $bundle->getNamespace(),
+            ];
         }
 
-        $this->kernel->expects($this->any())
-            ->method('getBundles')
-            ->will($this->returnValue($bundlesList));
+        $loader = new MigrationsLoader(
+            $this->kernel,
+            $this->connection,
+            $this->container,
+            $this->eventDispatcher,
+            'Migrations/Schema',
+            'okvpn_migrations',
+            $bundlesList
+        );
 
         $this->eventDispatcher->expects($this->exactly(2))
             ->method('dispatch')
@@ -85,7 +83,7 @@ class MigrationsLoaderTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $migrations       = $this->loader->getMigrations();
+        $migrations       = $loader->getMigrations();
         $migrationClasses = $this->getMigrationClasses($migrations);
         $this->assertEquals($expectedMigrationClasses, $migrationClasses);
     }

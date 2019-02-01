@@ -62,7 +62,9 @@ class MigrationsLoader
     protected $excludeBundles;
 
     /**
-     * @var string Path that located migration files
+     * Prefix that located migration files. By default "Migrations/Schema"
+     *
+     * @var string
      */
     protected $migrationPath;
 
@@ -72,9 +74,16 @@ class MigrationsLoader
     protected $migrationTable;
 
     /**
+     * All migration paths to lookup bundles
+     *
+     * [
+     *    'OkvpnBundle' => ["dir_name" => '/var/src/', "namespace" => 'OkvpnBundle/Migrations'],
+     *    'AppBundle' => ["dir_name" => '/var/vendor/app/src', "namespace" => 'OkvpnBundle/Migrations'],
+     * ]
+     *
      * @var array
      */
-    protected $includedBundles;
+    protected $migrationsPaths;
 
     /**
      * @param KernelInterface          $kernel
@@ -83,7 +92,7 @@ class MigrationsLoader
      * @param EventDispatcherInterface $eventDispatcher
      * @param string                   $migrationPath
      * @param string                   $migrationTable
-     * @param array                    $includedBundles
+     * @param array                    $migrationsPaths
      */
     public function __construct(
         KernelInterface $kernel,
@@ -92,7 +101,7 @@ class MigrationsLoader
         EventDispatcherInterface $eventDispatcher,
         string $migrationPath,
         string $migrationTable,
-        array $includedBundles = []
+        array $migrationsPaths = []
     ) {
         $this->kernel          = $kernel;
         $this->connection      = $connection;
@@ -100,7 +109,7 @@ class MigrationsLoader
         $this->eventDispatcher = $eventDispatcher;
         $this->migrationTable  = $migrationTable;
         $this->migrationPath   = $migrationPath;
-        $this->includedBundles = $includedBundles;
+        $this->migrationsPaths = $migrationsPaths;
     }
 
     /**
@@ -194,7 +203,7 @@ class MigrationsLoader
     }
 
     /**
-     * Return list of bundles with migration path.
+     * Return list of bundles/package names with migration path.
      *
      * @param string $migrationPrefix
      *
@@ -202,7 +211,7 @@ class MigrationsLoader
      */
     public function getBundleList(string $migrationPrefix = ''): array
     {
-        $bundles = $this->includedBundles;
+        $bundles = $this->migrationsPaths;
 
         if (!empty($this->bundles)) {
             $includedBundles = [];
