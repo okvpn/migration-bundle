@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Okvpn\Bundle\MigrationBundle\Command;
 
 use Doctrine\DBAL\Connection;
@@ -8,7 +10,7 @@ use Doctrine\DBAL\Schema\SchemaDiff;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\ORM\Mapping\ClassMetadata;
-
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Okvpn\Bundle\MigrationBundle\Provider\MigrationSchemaProvider;
 use Okvpn\Bundle\MigrationBundle\Provider\OrmSchemaProvider;
 use Okvpn\Bundle\MigrationBundle\Provider\SchemaProviderInterface;
@@ -20,6 +22,8 @@ use Symfony\Component\Console\Question\Question;
 
 class DiffMigrationsCommand extends ContainerAwareCommand
 {
+    protected const MIGRATION_CLASS_PREFIX = 'Migration';
+
     /**
      * @var array
      */
@@ -29,6 +33,11 @@ class DiffMigrationsCommand extends ContainerAwareCommand
      * @var array
      */
     protected $extendedFieldOptions = [];
+
+    /**
+     * @var array
+     */
+    protected $entities;
 
     /**
      * @var string
@@ -67,19 +76,10 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     {
         $this->setName('okvpn:migration:diff')
             ->addOption('plain-sql', null, InputOption::VALUE_NONE, 'Out schema as plain sql queries')
-            ->addOption(
-                'bundle',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Bundle name for which migration wll be generated'
-            )
-            ->addOption(
-                'migration-version',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Migration version',
-                'v1_0'
-            )
+            ->addOption('bundle', null, InputOption::VALUE_REQUIRED, 'Bundle name for which migration wll be generated')
+            ->addOption('migration-version', null, InputOption::VALUE_OPTIONAL, 'Migration version, for example v1_0')
+            ->addOption('write', null, InputOption::VALUE_NONE, 'Write migration to your filesystem')
+            ->addOption('entity', null, InputOption::VALUE_OPTIONAL, 'Dump migration only for this entity, for example: \'App\\\\Bundle\\\\User*\', \'^App\\\\(.*)\\\\Region$\'')
             ->setDescription('Compare current existing database structure with orm structure');
     }
 
@@ -88,9 +88,9 @@ class DiffMigrationsCommand extends ContainerAwareCommand
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getOption('bundle')) {
+        if (!$input->getOption('bundle') && !$input->getOption('entity')) {
             $helper = $this->getHelper('question');
-            $question = new Question("<info>Please select your package name:</info>\n > ");
+            $question = new Question("<info>Please select your package/bundle name:</info>\n > ");
             $bundleNames = array_keys($this->getContainer()->get('okvpn_migration.migrations.loader')->getBundleList());
             $question->setAutocompleterValues($bundleNames);
             $question->setValidator(function ($answer) use ($bundleNames) {
@@ -111,12 +111,14 @@ class DiffMigrationsCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getOption('bundle')) {
-            throw new \InvalidArgumentException('The "bundle" option can not be empty');
+        if (!$input->getOption('bundle') && !$input->getOption('entity')) {
+            throw new \InvalidArgumentException('The "bundle" or "entity" option can not be empty');
         }
 
-        $this->version = $input->getOption('migration-version');
         $this->initializeBundleRestrictions($input->getOption('bundle'));
+        $this->initializeEntityRestrictions($input->getOption('entity'));
+        $this->version = $input->getOption('migration-version') ?: $this->getNextMigrationVersion();
+
         $this->initializeMetadataInformation();
         $doctrine = $this->getContainer()->get('doctrine');
         $connection = $doctrine->getConnection();
@@ -134,7 +136,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
                 $output->writeln($sql . ';');
             }
         } else {
-            $this->dumpPhpSchema($schemaDiff, $output);
+            $this->dumpPhpSchema($schemaDiff, $output, $input->getOption('write'));
         }
     }
 
@@ -167,7 +169,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     /**
      * @param string $bundle
      */
-    protected function initializeBundleRestrictions($bundle)
+    protected function initializeBundleRestrictions(?string $bundle)
     {
         if ($bundle) {
             $bundles = $this->getContainer()->get('okvpn_migration.migrations.loader')->getBundleList();
@@ -178,8 +180,57 @@ class DiffMigrationsCommand extends ContainerAwareCommand
             }
 
             $this->migrationPath = $bundles[$bundle]['dir_name'];
-            $this->className = $bundle . 'Installer';
+            $this->className = $bundle;
             $this->namespace = $bundles[$bundle]['namespace'];
+        }
+    }
+
+    /**
+     * @param string $entity
+     */
+    protected function initializeEntityRestrictions(?string $entity)
+    {
+        if ($entity) {
+            $doctrine = $this->getContainer()->get('doctrine');
+            /** @var ClassMetadataInfo[] $entities */
+            $entities = array_filter(
+                $doctrine->getManager()->getMetadataFactory()->getAllMetadata(),
+                function (ClassMetadataInfo $item) use ($entity) {
+                    /** @var ClassMetadataInfo $item */
+                    return preg_match('/' . str_replace('\\', '\\\\', $entity) . '/', $item->getName());
+                }
+            );
+
+            if (!$entities) {
+                throw new \InvalidArgumentException(sprintf('Entity "%s" is not a known.', $entity));
+            }
+
+            $packages = array_filter(
+                $this->getContainer()->get('okvpn_migration.migrations.loader')->getBundleList(),
+                function (array $package) use ($entities) {
+                    foreach ($entities as $entity) {
+                        if (strpos($entity->getReflectionClass()->getFileName(), $package['dir_name']) !== 0) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            );
+
+            if (!$packages) {
+                throw new \InvalidArgumentException(sprintf('Not found package for this entity "%s".', $entity));
+            }
+
+            $this->entities = array_map(function (ClassMetadataInfo $info) {
+                return $info->getName();
+            }, $entities);
+
+            foreach ($packages as $packageName => $package) {
+                $this->migrationPath = $package['dir_name'];
+                $this->className = $packageName;
+                $this->namespace = $package['namespace'];
+            }
         }
     }
 
@@ -196,6 +247,10 @@ class DiffMigrationsCommand extends ContainerAwareCommand
             function (ClassMetadata $entityMetadata) {
                 if ($this->migrationPath) {
                     if (strpos($entityMetadata->getReflectionClass()->getFileName(), $this->migrationPath) === 0) {
+                        if ($this->entities && !in_array($entityMetadata->getName(), $this->entities)) {
+                            return;
+                        }
+
                         $this->allowedTables[$entityMetadata->getTableName()] = true;
                         foreach ($entityMetadata->getAssociationMappings() as $associationMappingInfo) {
                             if (!empty($associationMappingInfo['joinTable'])) {
@@ -212,32 +267,52 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     /**
      * @param SchemaDiff $schema
      * @param OutputInterface $output
+     * @param boolean $write
      */
-    protected function dumpPhpSchema(SchemaDiff $schema, OutputInterface $output)
+    protected function dumpPhpSchema(SchemaDiff $schema, OutputInterface $output, $write = false)
     {
         $visitor = $this->getContainer()->get('okvpn_migration.tools.schema_diff_dumper');
 
         $visitor->acceptSchemaDiff($schema);
+        $className = strpos($this->className, 'Bundle')
+            ? $this->className : $this->className . self::MIGRATION_CLASS_PREFIX;
 
-        $output->writeln(
-            $visitor->dump(
-                $this->allowedTables,
-                $this->namespace,
-                $this->className,
-                $this->version,
-                $this->extendedFieldOptions
-            )
+        $code = $visitor->dump(
+            $this->allowedTables,
+            $this->namespace,
+            $className,
+            $this->version,
+            $this->extendedFieldOptions
         );
+
+        if ($write === true) {
+            $migrationPrefix = trim(preg_replace('/\//', '\\', $this->getContainer()->getParameter('okvpn.migrations_path')), "\\");
+            $targetPath = $this->migrationPath . DIRECTORY_SEPARATOR
+                . str_replace('\\', DIRECTORY_SEPARATOR, $migrationPrefix .'\\' . $this->version);
+            if (!is_dir($targetPath)) {
+                @mkdir($targetPath, 0777, true);
+            }
+
+            $output->writeln('<info> Using migration path ' . $targetPath . '</info>');
+            $output->writeln('<info> Using version ' . $this->version . '</info>');
+            $filename = $targetPath . DIRECTORY_SEPARATOR . $className . '.php';
+            if (file_exists($filename)) {
+                throw new \RuntimeException('Migration ' . $filename . ' is exists, try to specify migration-version manually');
+            }
+
+            file_put_contents($filename, $code);
+            $output->writeln('<info> Write to file ' . $filename . '</info>');
+        } else {
+            $output->writeln($code);
+        }
     }
 
     /**
      * @param SchemaDiff $schemaDiff
      */
-    private function removeExcludedTables(SchemaDiff $schemaDiff)
+    protected function removeExcludedTables(SchemaDiff $schemaDiff)
     {
-        $excludes = [
-            'okvpn_migrations',
-        ];
+        $excludes = ['okvpn_migrations'];
 
         /** @var Table $v */
         foreach ($schemaDiff->newTables as $k => $v) {
@@ -252,5 +327,35 @@ class DiffMigrationsCommand extends ContainerAwareCommand
                 unset($schemaDiff->changedTables[$k]);
             }
         }
+    }
+
+    protected function getNextMigrationVersion()
+    {
+        $migrations = $this->getContainer()->get('okvpn_migration.migrations.loader')->getPlainMigrations();
+        $version = null;
+        foreach ($migrations as $migration) {
+            if (!$migration->getVersion() || $migration->getBundleName() !== $this->className) {
+                continue;
+            }
+
+            if (null !== $version) {
+                if (version_compare($version, $migration->getVersion()) === -1) {
+                    $version = $migration->getVersion();
+                }
+            } else {
+                $version = $migration->getVersion();
+            }
+        }
+
+        if ($version === null) {
+            return 'v1_0';
+        }
+
+        if (preg_match('/(\d+)$/', $version, $match)) {
+            $next = $match[1] + 1;
+            return preg_replace('/\d+$/', $next, $version);
+        }
+
+        return $version;
     }
 }

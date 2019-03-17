@@ -65,14 +65,14 @@ services:
         class: Okvpn\Bundle\MigrationBundle\Tools\SchemaDumper
         public: true
         arguments:
-            - '@twig'
+            - '@?twig'
             - '%okvpn.migrations_path%'
 
     okvpn_migration.tools.schema_diff_dumper:
         class: Okvpn\Bundle\MigrationBundle\Tools\SchemaDiffDumper
         public: true
         arguments:
-            - '@twig'
+            - '@?twig'
             - '%okvpn.migrations_path%'
 
     okvpn_migration.twig.schema_dumper:
