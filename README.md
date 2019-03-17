@@ -7,16 +7,55 @@ Database structure and data manipulator.
 [![Latest Unstable Version](https://poser.okvpn.org/okvpn/migration-bundle/v/unstable)](//packagist.org/packages/okvpn/migration-bundle)
 [![License](https://poser.okvpn.org/okvpn/migration-bundle/license)](https://packagist.org/packages/okvpn/migration-bundle)
 
-Purpose
+![Migration cast](http://poser.okvpn.org/images/migrationcast.svg)
+
+Intro
 -------
-MigrationBundle is subtree split of the [OroMigrationBundle](https://github.com/orocrm/platform/tree/master/src/Oro/Bundle/MigrationBundle).
-The ORO developers made a great tool, but it has very strong dependencies on other ORO Platform bundles (like as [EmailBundle, MessageQueue, SearchBundle](https://github.com/orocrm/platform/blob/2.1/src/Oro/Bundle/MigrationBundle/Command/LoadDataFixturesCommand.php#L13-L17)  etc.). So we forked this bundle and removed BAP dependencies, that makes this bundle more reusable in non-Oro Platform projects
+
+OkvpnMigrationBundle allow write database migrations using database agnostic PHP code,
+which uses the external [doctrine/dbal][7] library Doctrine Schema Manager.
+
+```php
+<?php // src/Migrations/Schema/v1_5
+
+namespace App\Migrations\Schema\v1_5;
+
+use Doctrine\DBAL\Schema\Schema;
+use Okvpn\Bundle\MigrationBundle\Migration\Migration;
+use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
+
+class AppMigration implements Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getMigrationVersion()
+    {
+        return 'v1_5';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function up(Schema $schema, QueryBag $queries)
+    {
+        $table = $schema->createTable('meteo');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('timestamp', 'datetime');
+        $table->addColumn('temp', 'decimal', ['precision' => 4, 'scale' => 2]);
+        $table->addColumn('pressure', 'decimal', ['precision' => 6, 'scale' => 2]);
+        $table->addColumn('humidity', 'decimal', ['precision' => 4, 'scale' => 2]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['timestamp']);
+    }
+}
+```
 
 Features
 --------
 - Write database migrations using database agnostic PHP code.
-- Locate migrations inside each bundle.
-- Compatible with different versions of Doctrine and Symfony.
+- Locate migrations inside each bundle and supports the multiple locations.
+- Compatible with different versions of Doctrine and Symfony 3-4.
 - Extensions for database structure migrations.
 - Events before and after migrations.
 
@@ -28,27 +67,32 @@ Install using composer:
 composer require okvpn/migration-bundle
 ```
 
-And add this bundle to your AppKernel:
+If you don't use Symfony Flex, you must enable the bundle manually in the application:
 
+Symfony 4 `config/bundles.php`
+```php
+<?php
+return [
+    Okvpn\Bundle\MigrationBundle\OkvpnMigrationBundle::class => ['all' => true],
+    //...
+];
+
+```
+
+Symfony 2 - 3, enable the bundle in `app/AppKernel.php`
 ```php
 <?php
 
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             new Okvpn\Bundle\MigrationBundle\OkvpnMigrationBundle(),
             //...
-        );
-    }
-    
-    public function registerContainerConfiguration(LoaderInterface $loader)
-    {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        ];
     }
 }
 ```
@@ -311,3 +355,4 @@ Also if you need to use other extension in your extension the extension class sh
   [4]: ./Migration/Extension/NameGeneratorAwareInterface.php
   [5]: ./Migration/Extension/RenameExtension.php
   [6]: ./Migration/Extension/RenameExtensionAwareInterface.php
+  [7]: https://www.doctrine-project.org/projects/doctrine-dbal/en/2.9/reference/schema-manager.html

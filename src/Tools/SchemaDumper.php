@@ -4,6 +4,7 @@ namespace Okvpn\Bundle\MigrationBundle\Tools;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Visitor\AbstractVisitor;
+use Twig\Environment;
 
 class SchemaDumper extends AbstractVisitor
 {
@@ -17,7 +18,7 @@ class SchemaDumper extends AbstractVisitor
     protected $schema;
 
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
@@ -27,10 +28,10 @@ class SchemaDumper extends AbstractVisitor
     protected $migrationPath;
 
     /**
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param string $migrationPath
      */
-    public function __construct(\Twig_Environment $twig, string $migrationPath)
+    public function __construct($twig, string $migrationPath)
     {
         $this->twig = $twig;
         $this->migrationPath = $migrationPath;
@@ -59,6 +60,10 @@ class SchemaDumper extends AbstractVisitor
         $version = self::DEFAULT_VERSION,
         array $extendedOptions = null
     ) {
+        if ($this->twig === null) {
+            throw new \RuntimeException('Twig is required. You need install "symfony/twig-bundle" to use this command');
+        }
+
         $migrationPath = trim(preg_replace('/\//', '\\', $this->migrationPath), "\\");
         $content = $this->twig->render(
             self::SCHEMA_TEMPLATE,

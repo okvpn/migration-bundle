@@ -34,7 +34,7 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('migrations_paths')
                     ->info('Lookup migrations directories')
                     ->useAttributeAsKey('name')
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('dir_name')->defaultNull()->end()
                             ->scalarNode('namespace')

@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 class DumpMigrationsCommand extends ContainerAwareCommand
 {
@@ -32,6 +33,11 @@ class DumpMigrationsCommand extends ContainerAwareCommand
      * @var string
      */
     protected $className;
+
+    /**
+     * @var string
+     */
+    protected $migrationPath;
 
     /**
      * @var string
@@ -64,6 +70,29 @@ class DumpMigrationsCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        if (!$input->getOption('bundle')) {
+            $helper = $this->getHelper('question');
+            $question = new Question("<info>Please select your package/bundle name:</info>\n > ");
+            $bundleNames = array_keys($this->getContainer()->get('okvpn_migration.migrations.loader')->getBundleList());
+            $question->setAutocompleterValues($bundleNames);
+            $question->setValidator(function ($answer) use ($bundleNames) {
+                if (!in_array($answer, $bundleNames)) {
+                    throw new \RuntimeException(sprintf('Package "%s" does not exist.', $answer));
+                }
+                return $answer;
+            });
+
+            $question->setMaxAttempts(3);
+            $bundle = $helper->ask($input, $output, $question);
+            $input->setOption('bundle', $bundle);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->version = $input->getOption('migration-version');
@@ -91,14 +120,16 @@ class DumpMigrationsCommand extends ContainerAwareCommand
     protected function initializeBundleRestrictions($bundle)
     {
         if ($bundle) {
-            $bundles = $this->getContainer()->getParameter('kernel.bundles');
+            $bundles = $this->getContainer()->get('okvpn_migration.migrations.loader')->getBundleList();
             if (!array_key_exists($bundle, $bundles)) {
                 throw new \InvalidArgumentException(
                     sprintf('Bundle "%s" is not a known bundle', $bundle)
                 );
             }
-            $this->namespace = str_replace($bundle, 'Entity', $bundles[$bundle]);
+
+            $this->namespace = $bundles[$bundle]['namespace'];
             $this->className = $bundle . 'Installer';
+            $this->migrationPath = $bundles[$bundle]['dir_name'];
         }
     }
 
@@ -114,7 +145,7 @@ class DumpMigrationsCommand extends ContainerAwareCommand
             $allMetadata,
             function (ClassMetadata $entityMetadata) {
                 if ($this->namespace) {
-                    if ($entityMetadata->namespace == $this->namespace) {
+                    if (strpos($entityMetadata->getReflectionClass()->getFileName(), $this->migrationPath) === 0) {
                         $this->allowedTables[$entityMetadata->getTableName()] = true;
                         foreach ($entityMetadata->getAssociationMappings() as $associationMappingInfo) {
                             if (!empty($associationMappingInfo['joinTable'])) {
@@ -122,10 +153,7 @@ class DumpMigrationsCommand extends ContainerAwareCommand
                                 $this->allowedTables[$joinTableName] = true;
                             }
                         }
-                        //$this->initializeExtendedFieldsOptions($entityMetadata);
                     }
-                } else {
-                    //$this->initializeExtendedFieldsOptions($entityMetadata);
                 }
             }
         );

@@ -7,20 +7,8 @@ use Doctrine\DBAL\Schema\Schema;
 use Okvpn\Bundle\MigrationBundle\Migration\Migration;
 use Okvpn\Bundle\MigrationBundle\Migration\QueryBag;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassLength)
- */
 class {{ className }} implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getMigrationVersion()
-    {
-        return '{{ version }}';
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -68,7 +56,8 @@ class {{ className }} implements Migration
         $table = $schema->createTable('{{ table.name }}');
 {% for column in table.columns %}
 {% set columnExtendedOptions = extendedOptions[table.name][column.name] is defined ? extendedOptions[table.name][column.name] : null %}
-        $table->addColumn('{{ column.name }}', '{{ column.type.name }}', {{ dmpr.dumpColumnOptions(column, columnExtendedOptions) }});
+    {%- set dumpColumnOptions = dmpr.dumpColumnOptions(column, columnExtendedOptions) %}
+        $table->addColumn('{{ column.name }}', '{{ column.type.name }}'{{ (dumpColumnOptions ? ', ' ~ dumpColumnOptions : '')|raw }});
 {% endfor %}
 {% for index in table.indexes %}
 {% if index.isPrimary %}
@@ -134,11 +123,15 @@ class {{ className }} implements Migration
     {
         $table = $schema->getTable('{{ table.name }}');
 {% for foreignKey in table.ForeignKeys %}
+{% set optionsArray = dmpr.dumpOptionsArray(foreignKey.options) %}
         $table->addForeignKeyConstraint(
             $schema->getTable('{{ foreignKey.foreignTableName }}'),
             {{ dmpr.dumpArray(foreignKey.localColumns) }},
-            {{ dmpr.dumpArray(foreignKey.foreignColumns) }},
-            {{ dmpr.dumpOptionsArray(foreignKey.options) }}
+            {{ dmpr.dumpArray(foreignKey.foreignColumns) }}{% if optionsArray and optionsArray != '[]'%},
+            {{ optionsArray|raw }}
+{% else %}
+
+{% endif %}
         );
 {% endfor %}
     }
@@ -161,7 +154,9 @@ class {{ className }} implements Migration
         {% if options.autoincrement is defined %}{% set items = items|merge(["'autoincrement' => " ~ dmpr.dumpBoolean(options.autoincrement)]) %}{% endif -%}
         {% if options.comment is defined %}{% set items = items|merge(["'comment' => " ~ dmpr.dumpString(options.comment)]) %}{% endif -%}
         {% if columnExtendedOptions is not empty %}{% set items = items|merge(["'oro_options' => " ~ dmpr.dumpOptionsArray(columnExtendedOptions)]) %}{% endif -%}
-        [{{ items|join(', ')|raw }}]
+        {% if items|length > 0 %}
+            [{{ items|join(', ')|raw }}]
+        {% endif %}
     {% endspaceless %}
 {% endmacro %}
 
