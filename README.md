@@ -7,7 +7,7 @@ Database structure and data manipulator.
 [![Latest Unstable Version](https://poser.okvpn.org/okvpn/migration-bundle/v/unstable)](//packagist.org/packages/okvpn/migration-bundle)
 [![License](https://poser.okvpn.org/okvpn/migration-bundle/license)](https://packagist.org/packages/okvpn/migration-bundle)
 
-![Migration cast](http://poser.okvpn.org/images/migrationcast.svg)
+![Migration cast](http://poser.okvpn.org/upload/demo.gif)
 
 Intro
 -------
