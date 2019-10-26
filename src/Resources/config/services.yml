@@ -27,7 +27,7 @@ services:
 
     okvpn_migration.migrations.query_executor:
         class: Okvpn\Bundle\MigrationBundle\Migration\MigrationQueryExecutor
-        public: false
+        public: true
         arguments:
             - '@doctrine.dbal.default_connection'
 
@@ -48,6 +48,7 @@ services:
 
     okvpn_migration.migrations.extension_manager:
         class: Okvpn\Bundle\MigrationBundle\Migration\MigrationExtensionManager
+        public: true
 
     okvpn_migration.migration.extension.rename:
         class: Okvpn\Bundle\MigrationBundle\Migration\Extension\RenameExtension
