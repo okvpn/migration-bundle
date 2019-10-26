@@ -97,6 +97,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
                 if (!in_array($answer, $bundleNames)) {
                     throw new \RuntimeException(sprintf('Package "%s" does not exist.', $answer));
                 }
+
                 return $answer;
             });
 
@@ -159,7 +160,11 @@ class DiffMigrationsCommand extends ContainerAwareCommand
     {
         if (!$this->okvpnSchemaProvider) {
             $this->okvpnSchemaProvider = new MigrationSchemaProvider(
-                $this->getContainer()->get('okvpn_migration.migrations.loader')
+                $this->getContainer()->get('okvpn_migration.migrations.loader'),
+                $this->getContainer()->get('okvpn_migration.migrations.query_executor')
+            );
+            $this->okvpnSchemaProvider->setExtensionManager(
+                $this->getContainer()->get('okvpn_migration.migrations.extension_manager')
             );
         }
 
@@ -286,9 +291,10 @@ class DiffMigrationsCommand extends ContainerAwareCommand
         );
 
         if ($write === true) {
-            $migrationPrefix = trim(preg_replace('/\//', '\\', $this->getContainer()->getParameter('okvpn.migrations_path')), "\\");
+            $migrationPrefix = trim(preg_replace('/\//', '\\',
+                $this->getContainer()->getParameter('okvpn.migrations_path')), "\\");
             $targetPath = $this->migrationPath . DIRECTORY_SEPARATOR
-                . str_replace('\\', DIRECTORY_SEPARATOR, $migrationPrefix .'\\' . $this->version);
+                . str_replace('\\', DIRECTORY_SEPARATOR, $migrationPrefix . '\\' . $this->version);
             if (!is_dir($targetPath)) {
                 @mkdir($targetPath, 0777, true);
             }
@@ -329,6 +335,9 @@ class DiffMigrationsCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * @return string|null
+     */
     protected function getNextMigrationVersion()
     {
         $migrations = $this->getContainer()->get('okvpn_migration.migrations.loader')->getPlainMigrations();
@@ -353,6 +362,7 @@ class DiffMigrationsCommand extends ContainerAwareCommand
 
         if (preg_match('/(\d+)$/', $version, $match)) {
             $next = $match[1] + 1;
+
             return preg_replace('/\d+$/', $next, $version);
         }
 
