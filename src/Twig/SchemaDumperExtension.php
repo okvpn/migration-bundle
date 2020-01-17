@@ -6,8 +6,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class SchemaDumperExtension extends \Twig_Extension
+class SchemaDumperExtension extends AbstractExtension
 {
     /** @var ManagerRegistry */
     protected $doctrine;
@@ -55,7 +57,7 @@ class SchemaDumperExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('okvpn_migration_get_schema_column_options', [$this, 'getColumnOptions']),
+            new TwigFunction('okvpn_migration_get_schema_column_options', [$this, 'getColumnOptions']),
         ];
     }
 
