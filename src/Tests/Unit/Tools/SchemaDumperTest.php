@@ -24,7 +24,7 @@ class SchemaDumperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->twig = $this->getMockBuilder('\Twig_Environment')->disableOriginalConstructor()->getMock();
+        $this->twig = $this->getMockBuilder('Twig\Environment')->disableOriginalConstructor()->getMock();
         $this->schema = new Schema();
         $this->schemaDumper = new SchemaDumper($this->twig, 'Migrations/Schema');
 
