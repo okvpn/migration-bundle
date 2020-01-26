@@ -27,13 +27,20 @@ class SchemaDiffDumper
     protected $migrationPath;
 
     /**
+     * @var string
+     */
+    protected $schemaTemplate;
+
+    /**
      * @param Environment $twig
      * @param string $migrationPath
+     * @param string $schemaTemplate
      */
-    public function __construct($twig, string $migrationPath)
+    public function __construct($twig, string $migrationPath, string $schemaTemplate = self::SCHEMA_TEMPLATE)
     {
         $this->twig = $twig;
         $this->migrationPath = $migrationPath;
+        $this->schemaTemplate = $schemaTemplate;
     }
 
     /**
@@ -64,8 +71,8 @@ class SchemaDiffDumper
         }
 
         $migrationPath = trim(preg_replace('/\//', '\\', $this->migrationPath), "\\");
-        $content = $this->twig->render(
-            self::SCHEMA_TEMPLATE,
+        return $this->twig->render(
+            $this->schemaTemplate,
             [
                 'schema' => $this->schemaDiff,
                 'allowedTables' => $allowedTables,
@@ -76,8 +83,6 @@ class SchemaDiffDumper
                 'migrationPath' => $migrationPath
             ]
         );
-
-        return $content;
     }
 
     /**

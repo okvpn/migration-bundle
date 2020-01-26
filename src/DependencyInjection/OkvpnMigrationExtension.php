@@ -53,5 +53,12 @@ final class OkvpnMigrationExtension extends Extension
 
         $container->getDefinition('okvpn_migration.migrations.loader')
             ->replaceArgument(6, array_merge($migrationsPaths, $config['migrations_paths'] ?? []));
+
+        if (!class_exists('\Twig_Extension') && class_exists('Twig\Extension\AbstractExtension')) {
+            $container->getDefinition('okvpn_migration.tools.schema_diff_dumper')
+                ->setArgument(2, '@OkvpnMigration/schema-diff-template-v3.php.twig');
+            $container->getDefinition('okvpn_migration.tools.schema_dumper')
+                ->setArgument(2, '@OkvpnMigration/schema-template-v3.php.twig');
+        }
     }
 }

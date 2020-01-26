@@ -28,13 +28,20 @@ class SchemaDumper extends AbstractVisitor
     protected $migrationPath;
 
     /**
+     * @var string
+     */
+    protected $templateName;
+
+    /**
      * @param Environment $twig
      * @param string $migrationPath
+     * @param string $templateName
      */
-    public function __construct($twig, string $migrationPath)
+    public function __construct($twig, string $migrationPath, string $templateName = self::SCHEMA_TEMPLATE)
     {
         $this->twig = $twig;
         $this->migrationPath = $migrationPath;
+        $this->templateName = $templateName;
     }
 
     /**
@@ -65,8 +72,8 @@ class SchemaDumper extends AbstractVisitor
         }
 
         $migrationPath = trim(preg_replace('/\//', '\\', $this->migrationPath), "\\");
-        $content = $this->twig->render(
-            self::SCHEMA_TEMPLATE,
+        return $this->twig->render(
+            $this->templateName,
             [
                 'schema' => $this->schema,
                 'allowedTables' => $allowedTables,
@@ -77,8 +84,6 @@ class SchemaDumper extends AbstractVisitor
                 'migrationPath' => $migrationPath,
             ]
         );
-
-        return $content;
     }
 
     protected function getMigrationNamespace($namespace)
